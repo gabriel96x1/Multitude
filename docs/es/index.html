@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multitude — un prefab por ventana, en Unity</title>
+<meta name="description" content="Multitude abre varios prefabs de Unity a la vez, cada uno en su ventana con sesión aislada, vista 3D e inspector real. Aplica o descarta, sin sobrescribir por accidente.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Multitude — un prefab por ventana, en Unity">
+<meta property="og:description" content="Varios prefabs abiertos a la vez, cada uno con su vista previa, su inspector y su reparto. Sin tocar tu escena.">
+<meta property="og:image" content="../assets/img/vfx-window.png">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../">Multitude <span>extensión de editor para Unity</span></a>
+    <nav aria-label="Secciones">
+      <a href="#que-hace">Qué hace</a>
+      <a href="#capturas">Capturas</a>
+      <a href="#instalar">Instalar</a>
+      <a href="https://github.com/USUARIO/Multitude">GitHub</a>
+    </nav>
+    <div class="lang" aria-label="Idioma">
+      <a href="../">EN</a>
+      <a href="./" aria-current="page">ES</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Versión 0.1.0 · solo editor</p>
+        <h1>Un prefab<br><em>por ventana.</em></h1>
+        <p class="lede">
+          Multitude abre varios prefabs a la vez: cada uno con su jerarquía, su vista 3D y su inspector.
+          <strong>No toca la escena que tienes abierta.</strong> Aplicas cuando de verdad quieres y
+          descartas cuando no.
+        </p>
+        <div class="actions">
+          <a class="btn btn--primary" href="#instalar">Obtener el paquete</a>
+          <a class="btn" href="https://github.com/USUARIO/Multitude/blob/main/Documentation~/MVP.md">Leer la documentación</a>
+        </div>
+        <ul class="badges">
+          <li>Unity 6000.6+</li>
+          <li>Solo editor</li>
+          <li>Sin runtime</li>
+          <li>MIT</li>
+        </ul>
+      </div>
+
+      <figure class="shot">
+        <img src="../assets/img/vfx-window.png" width="1120" height="700" alt="Ventana de Multitude con un prefab de impacto de fuego: jerarquía a la izquierda, el efecto reproduciéndose en la vista 3D y el inspector de componentes debajo.">
+        <figcaption>Un prefab de VFX reproduciéndose en su propia ventana — sin play mode y sin escena.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="que-hace">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Qué cambia</h2>
+        <p>
+          Unity te da un prefab stage y una escena a la vez. Multitude le da a cada prefab su propio
+          documento, y mantiene todos fuera de la escena en la que estás trabajando.
+        </p>
+      </div>
+
+      <dl class="spec">
+        <div>
+          <dt>Ventanas</dt>
+          <dd><b>Un documento por prefab</b>Abre tantos como necesites. Cada uno conserva su jerarquía, su selección, su cámara y su reparto; acóplalos o flótalos y cambia entre ellos sin perder nada.</dd>
+        </div>
+        <div>
+          <dt>Sesiones</dt>
+          <dd><b>Aisladas hasta que tú digas</b>El prefab se carga en su propia escena de preview. No se escribe nada en el asset hasta que pulsas Apply.</dd>
+        </div>
+        <div>
+          <dt>Seguridad</dt>
+          <dd><b>Apply nunca sobrescribe a ciegas</b>Antes de guardar, compara el archivo en disco con el snapshot que tomó al abrir la ventana. Si cambió, ofrece sobrescribir, seguir editando o recargar.</dd>
+        </div>
+        <div>
+          <dt>Vista previa</dt>
+          <dd><b>Render que se queda en la ventana</b>Órbita, desplaza, acerca y encuadra en 3D. La imagen sale de una copia privada en su propia capa, así que tu escena, el scene view, el game view y el prefab stage no la ven nunca.</dd>
+        </div>
+        <div>
+          <dt>Efectos</dt>
+          <dd><b>Las partículas se reproducen en edición</b>Play y pausa, restart, loop y velocidad de 0,1x a 2x, avanzando a mano: nada depende de entrar en play mode.</dd>
+        </div>
+        <div>
+          <dt>Reparto</dt>
+          <dd><b>Paneles al tamaño que quieras</b>Arrastra los separadores para redimensionar la jerarquía y el inspector; doble clic para volver al tamaño por defecto. Cada ventana recuerda sus proporciones.</dd>
+        </div>
+        <div>
+          <dt>Inspector</dt>
+          <dd><b>Los editores propios de Unity</b>Los componentes se dibujan con los inspectores nativos, así que los campos serializados, los editores personalizados y el undo/redo siguen funcionando igual.</dd>
+        </div>
+        <div>
+          <dt>Alcance</dt>
+          <dd><b>Pequeño a propósito</b>Prefabs normales y variantes. Los assets de modelo se rechazan con un mensaje. Escenas y ScriptableObjects no entran en esta versión.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="capturas">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Dentro de una ventana</h2>
+        <p>El reparto es el que ya conoces del editor, pero pertenece a un solo prefab y a nada más.</p>
+      </div>
+
+      <div class="gallery">
+        <figure class="shot">
+          <img src="../assets/img/prefab-window.png" width="1120" height="700" alt="Ventana de Multitude editando un prefab de personaje: jerarquía a la izquierda, el objeto seleccionado resaltado en la vista 3D y sus campos de Transform debajo.">
+          <figcaption>Jerarquía, vista previa e inspector de un prefab, con la selección resaltada en la vista.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img src="../assets/img/inspector.png" width="710" height="332" alt="Inspector de componentes mostrando Transform con position, rotation y scale, y un MeshFilter debajo.">
+          <figcaption>Transform y componentes se dibujan con los editores de Unity: números, undo y redo incluidos.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="instalar">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Instalar</h2>
+        <p>Paquete solo para el editor, sin dependencias. Se añade al manifest del proyecto y Unity hace el resto.</p>
+      </div>
+
+      <div class="install">
+        <div>
+          <div class="step">
+            <h3>Desde el Package Manager</h3>
+            <p>Abre <em>Window &gt; Package Manager</em>, pulsa <em>+</em> y elige <em>Add package from git URL…</em>, luego pega:</p>
+            <div class="code">
+              <button class="copy" data-copy="cmd-git" data-label="copiar" aria-label="Copiar la URL del repositorio">copiar</button>
+              <pre id="cmd-git">https://github.com/USUARIO/Multitude.git</pre>
+            </div>
+          </div>
+
+          <div class="step">
+            <h3>Desde <code>manifest.json</code></h3>
+            <p>Una ruta relativa a la carpeta <code>Packages</code> del proyecto sirve para un clon local:</p>
+            <div class="code">
+              <button class="copy" data-copy="cmd-file" data-label="copiar" aria-label="Copiar la entrada del manifest">copiar</button>
+              <pre id="cmd-file">"com.gabs.multitude": "file:../../Multitude"</pre>
+            </div>
+          </div>
+
+          <div class="step">
+            <h3>Ejecutar sus tests</h3>
+            <p>El paquete incluye tests EditMode. Regístralo como testable para verlos en el Test Runner:</p>
+            <div class="code">
+              <button class="copy" data-copy="cmd-tests" data-label="copiar" aria-label="Copiar la entrada de testables">copiar</button>
+              <pre id="cmd-tests">"testables": ["com.gabs.multitude"]</pre>
+            </div>
+          </div>
+
+          <div class="step">
+            <h3>Abrir un prefab</h3>
+            <p>Clic derecho en un prefab del Project window y elige <em>Assets &gt; Multitude &gt; Open Prefab in Multitude</em>, o usa <em>Tools &gt; Multitude &gt; Open Selected Prefabs</em>.</p>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <h3>Requisitos</h3>
+          <ul>
+            <li><b>Unity 6000.6</b> (Unity 6.6) o superior.</li>
+            <li>Solo editor: el paquete no añade <b>código de runtime</b> a tu build.</li>
+            <li>Probado con <b>URP 17.6</b>; el código no depende del pipeline.</li>
+            <li>Prefabs normales y variantes de prefab.</li>
+            <li>Licencia: <b>MIT</b>.</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="mono">Multitude 0.1.0 · MIT · Gabriel RZ</span>
+    <span>
+      <a href="https://github.com/USUARIO/Multitude">Repositorio</a> ·
+      <a href="https://github.com/USUARIO/Multitude/blob/main/CHANGELOG.md">Cambios</a> ·
+      <a href="https://github.com/USUARIO/Multitude/blob/main/Documentation~/MVP.md">Documentación</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
