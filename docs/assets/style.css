@@ -1,16 +1,23 @@
 /* Multitude landing — one accent, technical register, no gradients, no glass. */
 
 :root {
-  --bg: #0a0b0d;
-  --surface: #101216;
-  --surface-2: #15181d;
-  --ink: #e9ecf2;
-  --muted: #a6aeba;
-  --border: #23262d;
-  --border-strong: #31353e;
-  --accent: #f5a524;
-  --accent-soft: rgba(245, 165, 36, 0.12);
-  --accent-ink: #1a1204;
+  /* grimoire palette: charcoal base, parchment text, arcane purple structure,
+     aged gold accent, moss for quiet borders */
+  --bg: #1c1c1c;
+  --surface: #241f26;
+  --surface-2: #2a2130;
+  --ink: #eae0d5;
+  --muted: #d8d0c5;
+  --border: #3e1f47;
+  --border-strong: #8c7339;
+  --accent: #c5a059;
+  --accent-hover: #d4b36c;
+  --accent-soft: rgba(197, 160, 89, 0.14);
+  --accent-ink: #1c1c1c;
+  --purple: #4a235a;
+  --purple-deep: #3e1f47;
+  --moss: #2c4c3e;
+  --moss-deep: #1e3f20;
   --radius: 10px;
   --max: 1180px;
   --sans: ui-sans-serif, -apple-system, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -78,8 +85,8 @@ a:hover {
   position: sticky;
   top: 0;
   z-index: 20;
-  border-bottom: 1px solid var(--border);
-  background: rgba(10, 11, 13, 0.92);
+  border-bottom: 1px solid var(--moss-deep);
+  background: rgba(28, 28, 28, 0.94);
   backdrop-filter: blur(6px);
 }
 
@@ -102,8 +109,8 @@ a:hover {
 
 .brand span {
   font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -130,8 +137,8 @@ a:hover {
   align-items: center;
   gap: 6px;
   font-family: var(--mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.1em;
+  font-size: 0.76rem;
+  letter-spacing: 0.09em;
 }
 
 .lang a {
@@ -143,7 +150,7 @@ a:hover {
 
 .lang a[aria-current="page"] {
   color: var(--accent);
-  background: var(--accent-soft);
+  background: var(--purple-deep);
 }
 
 @supports not (backdrop-filter: blur(6px)) {
@@ -171,8 +178,8 @@ a:hover {
   align-items: center;
   gap: 9px;
   font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.16em;
+  font-size: 0.73rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--accent);
   margin: 0 0 18px;
@@ -248,8 +255,8 @@ h1 em {
 }
 
 .btn--primary:hover {
-  background: #ffb63d;
-  border-color: #ffb63d;
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 .badges {
@@ -260,16 +267,17 @@ h1 em {
   padding: 0;
   list-style: none;
   font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--ink);
 }
 
 .badges li {
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: 999px;
   padding: 5px 11px;
+  color: var(--ink);
 }
 
 /* ---------- screenshot frame ---------- */
@@ -281,12 +289,12 @@ h1 em {
   border-radius: var(--radius);
   background: var(--surface-2);
   overflow: hidden;
-  box-shadow: 0 34px 80px -44px rgba(0, 0, 0, 1), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  box-shadow: 0 34px 80px -44px rgba(0, 0, 0, 1), 0 0 0 1px rgba(197, 160, 89, 0.12) inset;
 }
 
 .shot img {
   border-radius: 6px;
-  background: #000;
+  background: #141213;
 }
 
 .shot img {
@@ -299,8 +307,8 @@ h1 em {
   padding: 11px 14px;
   border-top: 1px solid var(--border);
   font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
+  font-size: 0.76rem;
+  letter-spacing: 0.03em;
   color: var(--muted);
 }
 
@@ -352,8 +360,9 @@ h2 {
 
 .spec dt {
   font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--accent);
   padding-top: 3px;
@@ -409,7 +418,7 @@ h2 {
 
 .code {
   position: relative;
-  border: 1px solid var(--border);
+  border: 1px solid var(--purple);
   border-radius: 8px;
   background: var(--surface-2);
   overflow: hidden;
@@ -422,7 +431,7 @@ h2 {
   font-family: var(--mono);
   font-size: 0.82rem;
   line-height: 1.55;
-  color: #d7dce6;
+  color: var(--ink);
 }
 
 .code pre .k {
@@ -430,7 +439,7 @@ h2 {
 }
 
 .code pre .c {
-  color: #6e7686;
+  color: var(--accent);
 }
 
 .copy {
@@ -444,8 +453,8 @@ h2 {
   background: var(--surface);
   color: var(--muted);
   font-family: var(--mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   cursor: pointer;
 }
@@ -458,10 +467,11 @@ h2 {
 .copy[data-copied="true"] {
   color: var(--accent);
   border-color: var(--accent);
+  background: var(--purple-deep);
 }
 
 .panel {
-  border: 1px solid var(--border);
+  border: 1px solid var(--purple);
   border-radius: var(--radius);
   background: var(--surface);
   padding: 22px;
