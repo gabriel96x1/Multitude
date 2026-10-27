@@ -1,0 +1,157 @@
+name: Test package
+
+# The 32 EditMode tests on every commit proposed for master, on the exact tree being proposed.
+# The release workflow runs the same suite again right before exporting, so this job is the fast
+# feedback and that one is the proof of what actually gets published.
+#
+# Why a throwaway project instead of `-runTests` on the package: Unity only runs test assemblies
+# that belong to the project it opens. Copying Editor/ and Tests/ into Assets/Multitude keeps both
+# asmdefs intact (includePlatforms: [Editor], defineConstraints: [UNITY_INCLUDE_TESTS]) and the
+# Test Runner discovers them like any other project test assembly.
+#
+# Prerequisites (repository secrets) — see Documentation~/RELEASING.md:
+#   UNITY_LICENSE        the Unity 6000.6.2f1 .ulf licence (XML, or its base64) — required
+#   DOCKERHUB_USERNAME   optional, authenticated image pull (200 / 6 h instead of 100 / 6 h per IP)
+#   DOCKERHUB_TOKEN
+
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UNITY_VERSION: 6000.6.2f1
+  # verified with `docker manifest inspect` on 2026-10-27: the tag exists and is linux/amd64
+  UNITY_IMAGE: unityci/editor:ubuntu-6000.6.2f1-base-3
+  UNITY_PATH: /opt/unity/Editor/Unity
+  PROJECT: /tmp/project
+
+jobs:
+  editmode:
+    name: EditMode (Unity 6000.6)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container:
+      image: unityci/editor:ubuntu-6000.6.2f1-base-3
+      credentials:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trust the checkout (container runs as root)
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Install the Unity licence
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        run: |
+          set -euo pipefail
+          if [ -z "${UNITY_LICENSE:-}" ]; then
+            echo "::error::secret UNITY_LICENSE is empty — see Documentation~/RELEASING.md"; exit 1
+          fi
+          mkdir -p /root/.local/share/unity3d/Unity
+          LICENSE_FILE=/root/.local/share/unity3d/Unity/Unity_lic.ulf
+          case "$UNITY_LICENSE" in
+            "<?xml"*) printf '%s' "$UNITY_LICENSE" > "$LICENSE_FILE" ;;
+            *) printf '%s' "$UNITY_LICENSE" | base64 -d > "$LICENSE_FILE" ;;
+          esac
+          test -s "$LICENSE_FILE" || { echo "::error::licence file is empty"; exit 1; }
+
+      # The project has to exist *before* the cache is restored, otherwise -createProject refuses a
+      # directory that already holds a Library/.
+      - name: Scaffold throwaway project
+        run: |
+          set -euo pipefail
+          "$UNITY_PATH" -batchmode -quit -nographics -createProject "$PROJECT" -logFile /tmp/create.log \
+            || { tail -40 /tmp/create.log; exit 1; }
+
+          # the package, as the user would see it
+          mkdir -p "$PROJECT/Assets/Multitude"
+          for item in Editor package.json README.md CHANGELOG.md LICENSE licenses; do
+            if [ -e "$item" ]; then
+              cp -R "$item" "$PROJECT/Assets/Multitude/"
+              [ -e "$item.meta" ] && cp "$item.meta" "$PROJECT/Assets/Multitude/" || true
+            fi
+          done
+
+          # the tests travel too: same assembly layout, so the asmdefs keep working
+          mkdir -p "$PROJECT/Assets/Multitude/Tests"
+          cp -R Tests/. "$PROJECT/Assets/Multitude/Tests/"
+          [ -e Tests.meta ] && cp Tests.meta "$PROJECT/Assets/Multitude/" || true
+
+          # UNITY_INCLUDE_TESTS assemblies only compile when the test framework is present, and
+          # -createProject does not ship it in Unity 6000.6 (verified on the local editor).
+          if ! grep -q 'com.unity.test-framework' "$PROJECT/Packages/manifest.json"; then
+            sed -i 's/"dependencies": {/"dependencies": {\n    "com.unity.test-framework": "1.8.0",/' \
+              "$PROJECT/Packages/manifest.json"
+          fi
+          grep -n 'test-framework' "$PROJECT/Packages/manifest.json"
+
+      # A warm Library/ saves most of the import time. The key carries the editor version because a
+      # Library built by another Unity patch breaks asset import in confusing ways.
+      - name: Cache Unity project library
+        uses: actions/cache@v4
+        with:
+          path: /tmp/project/Library
+          key: library-${{ env.UNITY_VERSION }}-${{ hashFiles('package.json', '.github/workflows/test-package.yml') }}
+          restore-keys: |
+            library-${{ env.UNITY_VERSION }}-
+
+      - name: Run EditMode tests
+        id: tests
+        run: |
+          set +e
+          "$UNITY_PATH" -batchmode -nographics -projectPath "$PROJECT" \
+            -runTests -testPlatform EditMode \
+            -testResults "$GITHUB_WORKSPACE/results.xml" \
+            -logFile /tmp/tests.log
+          code=$?
+          set -e
+
+          echo "unity exit code: $code"
+          tail -40 /tmp/tests.log || true
+
+          if [ -f results.xml ]; then
+            grep -o 'testcasecount="[0-9]*" result="[A-Za-z]*" total="[0-9]*" passed="[0-9]*" failed="[0-9]*"' results.xml | head -1 || true
+          fi
+
+          # Unity: 0 = all passed, 2 = tests failed, 3 = the run itself failed (licence, import, crash)
+          case "$code" in
+            0) ;;
+            2) echo "::error::EditMode tests failed"; exit 1 ;;
+            *) echo "::error::Unity test run failed before reporting (infrastructure)"; exit 1 ;;
+          esac
+
+          COUNT=$(grep -o 'testcasecount="[0-9]*"' results.xml | head -1 | grep -o '[0-9]*' || echo 0)
+          echo "tests reported: $COUNT"
+          # A green run that never compiled the test assembly reports 0 — a gate that tests nothing.
+          test "$COUNT" -ge 32 || { echo "::error::expected at least 32 tests, got $COUNT"; exit 1; }
+
+      - name: Publish JUnit report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: EditMode (Unity 6000.6)
+          path: results.xml
+          reporter: java-junit
+          fail-on-error: false
+
+      - name: Keep the raw results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: editmode-results
+          path: results.xml
+          if-no-files-found: warn
