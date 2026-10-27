@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Multitude — abre varios prefabs de Unity a la vez, cada uno en su ventana</title>
 <meta name="description" content="Extensión de editor para Unity, gratis y de código abierto: abre varios prefabs a la vez, cada uno en su ventana con sesión aislada y vista 3D. Unity 6.6+, solo editor.">
-<meta name="keywords" content="editor de prefabs Unity, abrir varios prefabs a la vez, extensión de editor Unity, alternativa gratis a Multiverse, Unity 6, código abierto, alternativa al prefab stage">
+<meta name="keywords" content="editor de prefabs Unity, abrir varios prefabs a la vez, extensión de editor Unity, Unity 6, código abierto, alternativa al prefab stage, herramienta gratis para Unity">
 <meta name="author" content="Gabriel RZ">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="color-scheme" content="dark">
@@ -56,7 +56,7 @@
       "codeRepository": "https://github.com/gabriel96x1/Multitude",
       "url": "https://gabriel96x1.github.io/Multitude/es/",
       "inLanguage": "es",
-      "keywords": "Unity prefab editor, open multiple prefabs at once, Unity editor extension, prefab stage alternative, Unity 6 tool, free Multiverse alternative, open source Unity package, edit prefab in its own window",
+      "keywords": "editor de prefabs Unity, abrir varios prefabs a la vez, extensión de editor Unity, Unity 6, código abierto, alternativa al prefab stage, herramienta gratis para Unity",
       "image": "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
       "screenshot": "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
       "datePublished": "2026-10-27",
@@ -103,15 +103,7 @@
           "name": "¿Multitude es gratis?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Sí. Es código abierto con doble licencia LGPL-3.0 o AGPL-3.0, sin versión de pago, sin cuenta y sin servidor de licencias. Herramientas de pago como Multiverse requieren suscripción; Multitude no."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿En qué se diferencia de Multiverse?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Multitude se inspira en la idea de Multiverse de una ventana por prefab, pero es gratuito y de código abierto, solo para el editor, y no añade código al build. Multiverse hoy requiere una licencia de pago."
+            "text": "Sí. Es código abierto con doble licencia LGPL-3.0 o AGPL-3.0, sin versión de pago, sin cuenta y sin servidor de licencias."
           }
         },
         {
@@ -136,6 +128,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "No. El paquete es un único ensamblado solo para editor: no hay ensamblado de runtime, así que no afecta al tamaño del build ni al player."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué limitaciones tiene?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Trabaja con prefabs normales y variantes. Escenas, ScriptableObjects y model prefabs quedan fuera, y los inspectores personalizados que esperan el prefab stage pueden dibujarse incompletos. Los cambios sin aplicar no sobreviven a una recarga de dominio."
           }
         },
         {
@@ -400,12 +400,7 @@
 
       <div class="step">
         <h3>¿Multitude es gratis?</h3>
-        <p>Sí. Es código abierto con doble licencia LGPL-3.0 o AGPL-3.0, sin versión de pago, sin cuenta y sin servidor de licencias. Herramientas de pago como Multiverse requieren suscripción; Multitude no.</p>
-      </div>
-
-      <div class="step">
-        <h3>¿En qué se diferencia de Multiverse?</h3>
-        <p>Multitude se inspira en la idea de Multiverse de una ventana por prefab, pero es gratuito y de código abierto, solo para el editor, y no añade código al build. Multiverse hoy requiere una licencia de pago.</p>
+        <p>Sí. Es código abierto con doble licencia LGPL-3.0 o AGPL-3.0, sin versión de pago, sin cuenta y sin servidor de licencias.</p>
       </div>
 
       <div class="step">
@@ -424,38 +419,13 @@
       </div>
 
       <div class="step">
+        <h3>¿Qué limitaciones tiene?</h3>
+        <p>Trabaja con prefabs normales y variantes. Escenas, ScriptableObjects y model prefabs quedan fuera, y los inspectores personalizados que esperan el prefab stage pueden dibujarse incompletos. Los cambios sin aplicar no sobreviven a una recarga de dominio.</p>
+      </div>
+
+      <div class="step">
         <h3>¿Cómo instalo Multitude?</h3>
         <p>De tres formas: descargar Multitude-0.1.0.unitypackage del release y arrastrarlo a la ventana Project; añadir el tarball .tgz desde el Package Manager; o añadir la git URL https://github.com/gabriel96x1/Multitude.git. Instala solo una de las tres.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="viniendo-de-multiverse">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>¿Vienes de Multiverse?</h2>
-        <p>Multitude se inspira en la idea de editar cada prefab en su propia ventana. Esa idea aquí es gratis.</p>
-      </div>
-
-      <div class="step">
-        <h3>Si usabas Multiverse, que ahora es de pago</h3>
-        <p>Multitude cubre el flujo central gratis y en abierto: cada prefab en su ventana, con su sesión
-          aislada, su vista 3D y su inspector propios, con Apply y Revert en vez de escrituras silenciosas.
-          Tiene licencia LGPL-3.0 o AGPL-3.0 — tú eliges — así que se puede auditar, parchear y distribuir
-          dentro de un producto cerrado, y no hay suscripción, ni puesto, ni cuenta.</p>
-      </div>
-
-      <div class="step">
-        <h3>Qué dejas por el camino, con honestidad</h3>
-        <p>Multitude está en 0.1.0 y acotado a prefabs: escenas y ScriptableObjects quedan fuera, los model
-          prefabs se rechazan y los inspectores personalizados que esperan el prefab stage pueden dibujarse
-          incompletos. Si necesitas una herramienta madura y con soporte comercial, una opción de pago sigue
-          siendo razonable. Si lo que quieres es el flujo de una ventana por prefab sin pagar licencia, es esto.</p>
-      </div>
-
-      <div class="actions" style="margin-top:26px">
-        <a class="btn btn--primary" href="#descargas">Descargar Multitude</a>
-        <a class="btn" href="https://github.com/gabriel96x1/Multitude/blob/master/CHANGELOG.md">Qué hay en 0.1.0</a>
       </div>
     </div>
   </section>

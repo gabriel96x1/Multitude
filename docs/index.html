@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Multitude — open several Unity prefabs at once, each in its own window</title>
 <meta name="description" content="Free, open-source Unity editor extension: open several prefabs at once, each in its own window with an isolated session and 3D preview. Unity 6.6+, editor only.">
-<meta name="keywords" content="Unity prefab editor, open multiple prefabs at once, Unity editor extension, prefab stage alternative, Unity 6 prefab tool, free Multiverse alternative, open source Unity package, edit prefab in its own window">
+<meta name="keywords" content="Unity prefab editor, open multiple prefabs at once, Unity editor extension, prefab stage alternative, Unity 6 prefab tool, free Unity editor tool, open source Unity package, edit prefab in its own window">
 <meta name="author" content="Gabriel RZ">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="color-scheme" content="dark">
@@ -56,7 +56,7 @@
       "codeRepository": "https://github.com/gabriel96x1/Multitude",
       "url": "https://gabriel96x1.github.io/Multitude/",
       "inLanguage": "en",
-      "keywords": "Unity prefab editor, open multiple prefabs at once, Unity editor extension, prefab stage alternative, Unity 6 tool, free Multiverse alternative, open source Unity package, edit prefab in its own window",
+      "keywords": "Unity prefab editor, open multiple prefabs at once, Unity editor extension, prefab stage alternative, Unity 6 prefab tool, free Unity editor tool, open source Unity package, edit prefab in its own window",
       "image": "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
       "screenshot": "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
       "datePublished": "2026-10-27",
@@ -103,15 +103,7 @@
           "name": "Is Multitude free?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Multitude is open source and dual-licensed under LGPL-3.0 or AGPL-3.0, with no paid tier, no account and no licence server. Paid prefab-workflow tools such as Multiverse require a subscription; Multitude does not."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How is Multitude different from Multiverse?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Multitude was inspired by the prefab-per-window idea of Multiverse, but it is free and open source, editor only, and it adds no runtime code to your build. Multiverse now requires a paid licence."
+            "text": "Yes. Multitude is open source, dual-licensed under LGPL-3.0 or AGPL-3.0, with no paid tier, no account and no licence server."
           }
         },
         {
@@ -140,7 +132,15 @@
         },
         {
           "@type": "Question",
-          "name": "How do I install Multitude?",
+          "name": "What are its limitations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It handles ordinary prefabs and prefab variants. Scenes, ScriptableObjects and model prefabs are out of scope, and custom inspectors that assume the prefab stage may draw incompletely. Unsaved edits do not survive a domain reload."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I install it?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Three ways: download Multitude-0.1.0.unitypackage from the release and drag it into the Unity Project window; add the .tgz tarball from Package Manager; or add the git URL https://github.com/gabriel96x1/Multitude.git. Install one route only."
@@ -400,12 +400,7 @@
 
       <div class="step">
         <h3>Is Multitude free?</h3>
-        <p>Yes. Multitude is open source and dual-licensed under LGPL-3.0 or AGPL-3.0, with no paid tier, no account and no licence server. Paid prefab-workflow tools such as Multiverse require a subscription; Multitude does not.</p>
-      </div>
-
-      <div class="step">
-        <h3>How is Multitude different from Multiverse?</h3>
-        <p>Multitude was inspired by the prefab-per-window idea of Multiverse, but it is free and open source, editor only, and it adds no runtime code to your build. Multiverse now requires a paid licence.</p>
+        <p>Yes. Multitude is open source, dual-licensed under LGPL-3.0 or AGPL-3.0, with no paid tier, no account and no licence server.</p>
       </div>
 
       <div class="step">
@@ -424,38 +419,13 @@
       </div>
 
       <div class="step">
-        <h3>How do I install Multitude?</h3>
+        <h3>What are its limitations?</h3>
+        <p>It handles ordinary prefabs and prefab variants. Scenes, ScriptableObjects and model prefabs are out of scope, and custom inspectors that assume the prefab stage may draw incompletely. Unsaved edits do not survive a domain reload.</p>
+      </div>
+
+      <div class="step">
+        <h3>How do I install it?</h3>
         <p>Three ways: download Multitude-0.1.0.unitypackage from the release and drag it into the Unity Project window; add the .tgz tarball from Package Manager; or add the git URL https://github.com/gabriel96x1/Multitude.git. Install one route only.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="coming-from-multiverse">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>Coming from Multiverse?</h2>
-        <p>Multitude was inspired by the idea of editing each prefab in its own window. That idea is free here.</p>
-      </div>
-
-      <div class="step">
-        <h3>If you were using Multiverse, which is now paid</h3>
-        <p>Multitude covers the core workflow for free and in the open: every prefab in its own window, its own
-          isolated session, its own 3D preview and its own inspector, with Apply and Revert instead of silent
-          writes. It is licensed LGPL-3.0 or AGPL-3.0 — you choose — so it can be audited, patched and shipped
-          inside a closed product, and there is no subscription, no seat and no account.</p>
-      </div>
-
-      <div class="step">
-        <h3>What you give up, honestly</h3>
-        <p>Multitude is at 0.1.0 and scoped to prefabs: scenes and ScriptableObjects are out of scope, model
-          prefabs are rejected, and custom inspectors that assume the prefab stage may draw incompletely. If
-          you need a mature, commercially supported tool with more surface area, a paid option is still a
-          reasonable choice. If what you want is the prefab-per-window workflow without a licence, this is it.</p>
-      </div>
-
-      <div class="actions" style="margin-top:26px">
-        <a class="btn btn--primary" href="#downloads">Get Multitude</a>
-        <a class="btn" href="https://github.com/gabriel96x1/Multitude/blob/master/CHANGELOG.md">What is in 0.1.0</a>
       </div>
     </div>
   </section>

@@ -3,7 +3,7 @@
 > Multitude is a free, open-source Unity editor extension (dual-licensed LGPL-3.0 or AGPL-3.0) that opens
 > several prefabs at the same time, each in its own window with an isolated session, a 3D preview and a
 > real inspector. It replaces the single prefab stage workflow. Unity 6000.6 (Unity 6.6) or newer, editor
-> only, no runtime code. Current version: 0.1.0. An open-source alternative to the paid Multiverse extension.
+> only, no runtime code. Free and open source. Current version: 0.1.0.
 
 - Repository: https://github.com/gabriel96x1/Multitude
 - Landing page (English): https://gabriel96x1.github.io/Multitude/
@@ -27,8 +27,6 @@
 - Nothing is written to disk until the user presses Apply; if the prefab changed on disk, Apply offers
   Overwrite / Keep editing / Reload from disk.
 - Free: no paid tier, no account, no licence server, no Unity subscription required.
-- Inspired by Multiverse, the prefab-per-window extension, which now requires payment. Multitude is the
-  free, open-source option for the same core workflow.
 - Install ONE route. The .unitypackage (Assets/Multitude) and the package routes (Packages/) compile the
   same types twice if both are installed.
 - The .unitypackage excludes Tests/ and Documentation~/ (Unity ignores folders ending in ~).
