@@ -1,0 +1,19 @@
+{
+  "name": "com.gabs.multitude",
+  "version": "0.1.0",
+  "displayName": "Multitude",
+  "description": "Open several prefab assets in independent editor windows, edit each one in isolation, preview its effects and apply or discard the changes explicitly.",
+  "unity": "6000.6",
+  "author": {
+    "name": "Gabriel RZ"
+  },
+  "keywords": [
+    "editor",
+    "prefab",
+    "workflow",
+    "window",
+    "vfx"
+  ],
+  "category": "Editor",
+  "dependencies": {}
+}
