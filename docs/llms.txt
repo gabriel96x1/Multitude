@@ -27,6 +27,8 @@
 - Nothing is written to disk until the user presses Apply; if the prefab changed on disk, Apply offers
   Overwrite / Keep editing / Reload from disk.
 - Free: no paid tier, no account, no licence server, no Unity subscription required.
+- Inspired by Multiverse, the prefab-per-window extension, which now requires payment. Multitude is the
+  free, open-source option for the same core workflow.
 - Install ONE route. The .unitypackage (Assets/Multitude) and the package routes (Packages/) compile the
   same types twice if both are installed.
 - The .unitypackage excludes Tests/ and Documentation~/ (Unity ignores folders ending in ~).
