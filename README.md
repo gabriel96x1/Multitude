@@ -86,4 +86,7 @@ docs/                         landing page (English in /, Spanish in /es/, GitHu
 
 ## License
 
-MIT, see [LICENSE.md](LICENSE.md).
+GNU General Public License v3.0 — see [LICENSE](LICENSE).
+
+Multitude is copyleft: if you distribute a modified version, its source has to be published under
+the same license.
