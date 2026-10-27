@@ -14,6 +14,13 @@ Packages/com.gabs.multitude/
 Unity imports it automatically. Open the window from `Tools > Multitude > Open Selected Prefabs`, or
 right click a prefab in the Project window and choose `Assets > Multitude > Open Prefab in Multitude`.
 
+### Packaging
+
+`./scripts/build-package.sh` runs the EditMode suite and writes `build/Multitude-<version>.unitypackage`
+plus the UPM tarball. The `.unitypackage` ships `Editor/` and the manifests only: no tests, no landing
+page, and `Documentation~/` can never travel inside it because Unity ignores folders ending in `~`. See
+`Documentation~/BUILDING.md`.
+
 ## Usage
 
 - **One window per prefab.** Open as many as you want; each keeps its own hierarchy, selection and
