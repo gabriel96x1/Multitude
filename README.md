@@ -86,4 +86,4 @@ docs/                         landing page (English in /, Spanish in /es/, GitHu
 
 ## License
 
-MIT, see [LICENSE.md](LICENSE.md).
+GNU, see [LICENSE](LICENSE).
