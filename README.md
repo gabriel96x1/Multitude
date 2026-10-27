@@ -86,4 +86,15 @@ docs/                         landing page (English in /, Spanish in /es/, GitHu
 
 ## License
 
-GNU, see [LICENSE](LICENSE).
+Dual licensed: **LGPL-3.0** or **AGPL-3.0**, your choice per copy or distribution — the notice is in
+[LICENSE](LICENSE) and the full texts in [`licenses/`](licenses).
+
+- **LGPL-3.0** (`licenses/LGPL-3.0.txt`, which builds on `licenses/GPL-3.0.txt`) lets you ship
+  Multitude inside a closed product, as long as the library itself — and any modification you make to
+  it — stays under the LGPL and the user can replace it. This is the option that fits a sold or closed
+  Unity tool.
+- **AGPL-3.0** (`licenses/AGPL-3.0.txt`) is strong copyleft and also covers offering the tool as a
+  service.
+
+Neither option is permissive in the MIT sense: modifications to the library stay open. Weigh that
+before bundling it into a commercial asset.
