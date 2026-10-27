@@ -33,15 +33,19 @@ otherwise it is decoded from base64 into `/root/.local/share/unity3d/Unity/Unity
 Personal licences expire. When a run fails with `No valid Unity Editor license found`, regenerate the
 `.ulf` and update the secret; nothing else in the workflow changes.
 
-### 2. `DOCKERHUB_USERNAME` + `DOCKERHUB_TOKEN` (recommended)
+### 2. `DOCKERHUB_USERNAME` + `DOCKERHUB_TOKEN` (optional)
 
 GitHub-hosted runners share IPs and Docker Hub allows 100 anonymous pulls per 6 h per IP. The failure is
 `toomanyrequests` while pulling the container, before any step runs, so it cannot be retried from inside
-the job. A Docker Hub token raises the limit to 200 per 6 h. Store both as repository secrets.
+the job.
+
+Both workflows deliberately ship **without** a `container.credentials` block: GitHub validates the workflow
+template before any step runs and rejects an empty value, so a missing secret would fail the job with
+`Unexpected value ''` instead of falling back to an anonymous pull. Re-add the block only when the two
+secrets exist (the snippet is in a comment right above `options` in both workflows).
 
 Alternative, no quota at all: run *Mirror Unity editor image* once, make the resulting
-`ghcr.io/gabriel96x1/unity-editor:6000.6.2f1` package public, then point `UNITY_IMAGE` and
-`container.image` in both workflows at it and delete the `credentials:` block.
+`ghcr.io/gabriel96x1/unity-editor:6000.6.2f1` package public, then point `image:` at it in both workflows.
 
 ### 3. Branch protection on `master`
 

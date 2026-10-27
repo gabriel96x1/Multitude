@@ -140,9 +140,16 @@ jobs:
     timeout-minutes: 45
     container:
       image: unityci/editor:ubuntu-6000.6.2f1-base-3
-      credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # No `credentials:` block on purpose: GitHub validates the template BEFORE any step runs and
+      # rejects an empty value, so a missing DOCKERHUB_* secret fails the whole job with
+      # "Unexpected value ''" instead of falling back to an anonymous pull. The pull is anonymous
+      # (100 / 6 h per shared runner IP). If you ever want the authenticated quota, add BOTH secrets
+      # and put this block back:
+      #   credentials:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # Better: run mirror-unity-image.yml once, make the GHCR package public and point `image:` at
+      # ghcr.io/<owner>/unity-editor:6000.6.2f1 — no credentials at all, and no Docker Hub quota.
       options: --user root
     env:
       PACKAGE_VERSION: ${{ needs.prepare.outputs.version }}
