@@ -47,6 +47,12 @@ die()  { printf '\n\033[31merror:\033[0m %s\n' "$*" >&2; exit 1; }
 cd "$ROOT"
 
 # ---------------------------------------------------------------- version + editor
+if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
+  printf '\n\033[33mwarning:\033[0m tracked files have uncommitted changes.\n'
+  printf '         The .unitypackage comes from the working tree, but the .tgz comes from HEAD\n'
+  printf '         (git archive). Commit first if both should match.\n'
+fi
+
 step "Reading package.json"
 [ -f package.json ] || die "run this from the package repository (package.json not found)"
 VERSION=$(python3 -c "import json;print(json.load(open('package.json'))['version'])")

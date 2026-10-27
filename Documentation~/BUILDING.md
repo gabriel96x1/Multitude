@@ -43,7 +43,9 @@ Do not install both at once: the same types would be compiled twice.
    then exports `Assets/Multitude` with `AssetDatabase.ExportPackage`.
 7. Verifies the archive: it must contain the editor asmdef and `package.json`, and must not contain
    `Tests/`, `Documentation~/` or `CiTools/`.
-8. Builds the UPM tarball with `git archive` + `npm pack`, minus `.github/`, `scripts/` and `docs/`.
+8. Builds the UPM tarball with `git archive HEAD` + `npm pack`, minus `.github/`, `scripts/` and
+   `docs/`. The tarball therefore reflects the **last commit**, not the working tree: the script warns
+   when tracked files are dirty, and so does the `.unitypackage` if you commit after building.
 
 Logs live in `.build/` (`create.log`, `tests.log`, `export.log`, `results.xml`). Both `.build/` and
 `build/` are gitignored.
