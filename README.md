@@ -11,7 +11,7 @@ changed on disk in the meantime, Apply refuses to overwrite it and asks you what
 
 **Landing page:** open `docs/index.html` locally, or enable GitHub Pages with *Settings → Pages →
 Deploy from branch → `master` / `/docs`* and it will be served at
-`https://<your-user>.github.io/Multitude/`.
+`https://gabriel96x1.github.io/Multitude/`.
 
 ## Requirements
 
