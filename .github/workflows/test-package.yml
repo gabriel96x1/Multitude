@@ -147,7 +147,8 @@ jobs:
           test "$COUNT" -ge 32 || { echo "::error::expected at least 32 tests, got $COUNT"; exit 1; }
 
       - name: Publish JUnit report
-        if: always()
+        # no results.xml when the run died before Unity started (missing licence): skip, do not fail
+        if: always() && hashFiles('results.xml') != ''
         uses: dorny/test-reporter@v1
         with:
           name: EditMode (Unity 6000.6)
