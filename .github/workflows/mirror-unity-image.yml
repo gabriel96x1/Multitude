@@ -1,0 +1,56 @@
+name: Mirror Unity editor image
+
+# Copies the editor image used by the tests and the release into GHCR, so a release never depends on
+# Docker Hub's pull quota (100 / 6 h per IP anonymously, shared across GitHub-hosted runners).
+#
+# Manual trigger only. After the first run, make the package public
+# (Packages → the new package → Package settings → Change visibility → Public) and switch UNITY_IMAGE /
+# container.image in test-package.yml and release-unitypackage.yml to:
+#   ghcr.io/${{ github.repository_owner }}/unity-editor:6000.6.2f1
+# Do not use ${{ }} inside env there; write the resolved string, then drop the `credentials:` block.
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Image to mirror"
+        type: string
+        default: "unityci/editor:ubuntu-6000.6.2f1-base-3"
+      tag:
+        description: "Tag inside GHCR"
+        type: string
+        default: "unity-editor:6000.6.2f1"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copy the image to GHCR
+        env:
+          SRC: ${{ inputs.source }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          ACTOR: ${{ github.actor }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          DST="ghcr.io/$OWNER/$TAG"
+          echo "mirroring $SRC -> $DST"
+          printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$ACTOR" --password-stdin
+          docker pull "$SRC"
+          docker tag "$SRC" "$DST"
+          docker push "$DST"
+          echo "done: $DST"
+
+      - name: Verify the mirror
+        env:
+          OWNER: ${{ github.repository_owner }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          DST="ghcr.io/$OWNER/$TAG"
+          docker manifest inspect "$DST" > /dev/null && echo "manifest ok: $DST"
