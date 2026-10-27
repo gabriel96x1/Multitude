@@ -55,9 +55,9 @@ Mark `EditMode (Unity 6000.6)` as a required status check. Without it the gate i
 
 1. Bump `version` in `package.json` and add the matching `## [<version>]` section to `CHANGELOG.md`.
 2. Open a PR into `master`, let the EditMode check pass, merge it.
-3. The release workflow runs by itself. It fails on purpose if:
+3. The release workflow runs by itself. A merge whose version is already released ends green with a
+   notice and publishes nothing — only bumping the version releases. It fails on purpose if:
    - `CHANGELOG.md` has no section for that version,
-   - the tag `v<version>` already exists (bump the version instead of re-releasing),
    - the pinned editor does not satisfy the `unity` field in `package.json`,
    - the export is suspiciously small or contains `Tests/`, `Documentation~/` or `CiTools/`.
 4. Confirm the Release carries both files:

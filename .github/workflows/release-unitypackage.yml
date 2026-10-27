@@ -1,6 +1,8 @@
 name: Release package
 
-# Publishes two installable artifacts whenever a pull request is merged into master:
+# Publishes two installable artifacts whenever a pull request is merged into master **with a version
+# that is not released yet**. A merge that does not change package.json's version exits green with a
+# notice instead of failing, so the release workflow only turns red when something is actually wrong:
 #
 #   Multitude-<version>.unitypackage   double click / drag into the Project window
 #   com.gabs.multitude-<version>.tgz   Package Manager › + › Add package from tarball
@@ -56,6 +58,7 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
       unity_min: ${{ steps.version.outputs.unity_min }}
+      release: ${{ steps.release.outputs.release }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -81,21 +84,29 @@ jobs:
             *) echo "::error::UNITY_VERSION $UNITY_VERSION does not match the declared unity $UNITY_MIN"; exit 1 ;;
           esac
 
-      - name: Refuse to republish an existing tag
+      - name: Decide whether this commit releases
+        id: release
         run: |
           set -euo pipefail
           V="${{ steps.version.outputs.version }}"
           if git rev-parse -q --verify "refs/tags/v$V" >/dev/null; then
             if [ "${{ inputs.force }}" = "true" ]; then
               echo "::warning::tag v$V already exists, rebuilding because force was requested"
+              echo "release=true" >> "$GITHUB_OUTPUT"
             else
-              echo "::error::tag v$V already exists — bump version in package.json"; exit 1
+              # Not an error: most merges do not change the version. A red X here would train
+              # everyone to ignore the release workflow.
+              echo "::notice::v$V is already released — nothing to publish. Bump the version in package.json to release again."
+              echo "release=false" >> "$GITHUB_OUTPUT"
             fi
+          else
+            echo "release=true" >> "$GITHUB_OUTPUT"
           fi
 
   tarball:
     name: Build UPM tarball
     needs: prepare
+    if: needs.prepare.outputs.release == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -136,6 +147,7 @@ jobs:
   package:
     name: Build .unitypackage
     needs: prepare
+    if: needs.prepare.outputs.release == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     container:
@@ -291,6 +303,7 @@ jobs:
   release:
     name: Publish GitHub Release
     needs: [prepare, tarball, package]
+    if: needs.prepare.outputs.release == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
