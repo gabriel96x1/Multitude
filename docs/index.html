@@ -18,11 +18,12 @@
   <div class="wrap">
     <a class="brand" href="./">Multitude <span>Unity editor extension</span></a>
     <nav aria-label="Sections">
+      <a href="#downloads">Download</a>
       <a href="#what">What it does</a>
       <a href="#shots">Screenshots</a>
       <a href="#install">Install</a>
       <a href="#license">License</a>
-      <a href="https://github.com/USUARIO/Multitude">GitHub</a>
+      <a href="https://github.com/gabriel96x1/Multitude">GitHub</a>
     </nav>
     <div class="lang" aria-label="Language">
       <a href="./" aria-current="page">EN</a>
@@ -44,8 +45,8 @@
           it, discard when you don't.
         </p>
         <div class="actions">
-          <a class="btn btn--primary" href="#install">Get the package</a>
-          <a class="btn" href="https://github.com/USUARIO/Multitude/blob/main/Documentation~/MVP.md">Read the docs</a>
+          <a class="btn btn--primary" href="#downloads">Get the package</a>
+          <a class="btn" href="https://github.com/gabriel96x1/Multitude/blob/master/Documentation~/MVP.md">Read the docs</a>
         </div>
         <ul class="badges">
           <li>Unity 6000.6+</li>
@@ -59,6 +60,62 @@
         <img src="assets/img/vfx-window.png" width="1120" height="700" alt="A Multitude window with a fire impact prefab: hierarchy on the left, the effect playing in the 3D preview, and the component inspector below.">
         <figcaption>VFX prefab playing inside its own window — no play mode, no scene.</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <section id="downloads">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Download</h2>
+        <p><strong>Version 0.1.0</strong>, the first public release. Three routes, same code — pick one.</p>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn--primary" href="https://github.com/gabriel96x1/Multitude/releases/download/v0.1.0/Multitude-0.1.0.unitypackage">Download .unitypackage</a>
+        <a class="btn" href="https://github.com/gabriel96x1/Multitude/releases/download/v0.1.0/com.gabs.multitude-0.1.0.tgz">Download .tgz</a>
+        <a class="btn" href="https://github.com/gabriel96x1/Multitude/releases">All releases</a>
+      </div>
+
+      <div class="install">
+        <div>
+          <div class="step">
+            <h3><code>.unitypackage</code></h3>
+            <p>Drag it into the Unity <em>Project</em> window, or double click it with the project open. The
+              sources land in <code>Assets/Multitude/</code>: no package manager involved, easy to read and
+              tweak. It does not update itself.</p>
+          </div>
+
+          <div class="step">
+            <h3>Tarball</h3>
+            <p><em>Window &gt; Package Manager &gt; + &gt; Add package from tarball…</em> and pick the
+              <code>.tgz</code>. Installs under <code>Packages/</code>, can be updated, and it is the route
+              that includes the EditMode tests.</p>
+          </div>
+
+          <div class="step">
+            <h3>Git URL, pinned to this release</h3>
+            <p>Skip the download and let the Package Manager pull it:</p>
+            <div class="code">
+              <button class="copy" data-copy="cmd-release-git" data-label="copy" aria-label="Copy the pinned git URL">copy</button>
+              <pre id="cmd-release-git">https://github.com/gabriel96x1/Multitude.git#v0.1.0</pre>
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <h3>Which one?</h3>
+          <ul>
+            <li><b>.unitypackage</b> — the code lives inside your project. Best for trying it, reading it or
+              patching it for yourself.</li>
+            <li><b>Tarball or git URL</b> — installed as a package. Best if you want to update it later, and
+              the only routes that carry the tests.</li>
+            <li>Install <b>one</b> of them: two copies compile the same types twice.</li>
+            <li>Needs <b>Unity 6000.6</b> or newer, editor only. The <code>.unitypackage</code> ships
+              <code>Editor/</code> and the manifests only — no tests, and no <code>Documentation~/</code>
+              (Unity ignores folders ending in <code>~</code>).</li>
+          </ul>
+        </aside>
+      </div>
     </div>
   </section>
 
@@ -144,7 +201,7 @@
             <p>Open <em>Window &gt; Package Manager</em>, press <em>+</em> and choose <em>Add package from git URL…</em>, then paste:</p>
             <div class="code">
               <button class="copy" data-copy="cmd-git" data-label="copy" aria-label="Copy the git URL">copy</button>
-              <pre id="cmd-git">https://github.com/USUARIO/Multitude.git</pre>
+              <pre id="cmd-git">https://github.com/gabriel96x1/Multitude.git</pre>
             </div>
           </div>
 
@@ -179,7 +236,7 @@
             <li>Editor only: the package adds <b>no runtime code</b> to your build.</li>
             <li>Tested with <b>URP 17.6</b>; the code has no pipeline dependency.</li>
             <li>Ordinary prefabs and prefab variants.</li>
-            <li>License: <b>LGPL-3.0 or AGPL-3.0</b>, dual licensed — <a href="https://github.com/USUARIO/Multitude/blob/main/LICENSE">LICENSE</a>.</li>
+            <li>License: <b>LGPL-3.0 or AGPL-3.0</b>, dual licensed — <a href="https://github.com/gabriel96x1/Multitude/blob/master/LICENSE">LICENSE</a>.</li>
           </ul>
         </aside>
       </div>
@@ -195,14 +252,14 @@
           Multitude is released under <strong>two copyleft licenses</strong>: you choose between
           <strong>LGPL-3.0</strong> and <strong>AGPL-3.0</strong>. It is worth being explicit about what
           that means for an editor package, because neither is the usual choice for a Unity tool. The
-          notice is in <a href="https://github.com/USUARIO/Multitude/blob/main/LICENSE">LICENSE</a>.
+          notice is in <a href="https://github.com/gabriel96x1/Multitude/blob/master/LICENSE">LICENSE</a>.
         </p>
       </div>
 
       <dl class="spec">
         <div>
           <dt>Two licenses</dt>
-          <dd><b>LGPL-3.0 or AGPL-3.0, you choose</b>Multitude is dual licensed: pick, per copy or distribution, whichever of the two fits your case. The notice is in <a href="https://github.com/USUARIO/Multitude/blob/main/LICENSE">LICENSE</a> and the full texts in <a href="https://github.com/USUARIO/Multitude/tree/main/licenses">licenses/</a>.</dd>
+          <dd><b>LGPL-3.0 or AGPL-3.0, you choose</b>Multitude is dual licensed: pick, per copy or distribution, whichever of the two fits your case. The notice is in <a href="https://github.com/gabriel96x1/Multitude/blob/master/LICENSE">LICENSE</a> and the full texts in <a href="https://github.com/gabriel96x1/Multitude/tree/master/licenses">licenses/</a>.</dd>
         </div>
         <div>
           <dt>LGPL-3.0</dt>
@@ -226,9 +283,9 @@
   <div class="wrap">
     <span class="mono">Multitude 0.1.0 · LGPL-3.0 / AGPL-3.0 · Gabriel RZ</span>
     <span>
-      <a href="https://github.com/USUARIO/Multitude">Repository</a> ·
-      <a href="https://github.com/USUARIO/Multitude/blob/main/CHANGELOG.md">Changelog</a> ·
-      <a href="https://github.com/USUARIO/Multitude/blob/main/Documentation~/MVP.md">Documentation</a>
+      <a href="https://github.com/gabriel96x1/Multitude">Repository</a> ·
+      <a href="https://github.com/gabriel96x1/Multitude/blob/master/CHANGELOG.md">Changelog</a> ·
+      <a href="https://github.com/gabriel96x1/Multitude/blob/master/Documentation~/MVP.md">Documentation</a>
     </span>
   </div>
 </footer>
