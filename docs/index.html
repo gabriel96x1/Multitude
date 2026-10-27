@@ -3,20 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Multitude — open several Unity prefabs at once, each in its own window</title>
-<meta name="description" content="Free, open-source Unity editor extension: open several prefabs at once, each in its own window with an isolated session and 3D preview. Unity 6.6+, editor only.">
+<title>Multitude — open several Unity prefabs at once</title>
+<meta name="description" content="Free, open-source Unity editor extension: open several prefabs at once, each in its own window with an isolated session and 3D preview. Unity 6.6+.">
 <meta name="keywords" content="Unity prefab editor, open multiple prefabs at once, Unity editor extension, prefab stage alternative, Unity 6 prefab tool, free Unity editor tool, open source Unity package, edit prefab in its own window">
 <meta name="author" content="Gabriel RZ">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#1c1c1c">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="assets/img/vfx-window-1120.webp" imagesrcset="assets/img/vfx-window-1120.webp 1120w, assets/img/vfx-window-2240.webp 2240w" imagesizes="(max-width: 900px) 100vw, 1120px" fetchpriority="high">
 <link rel="canonical" href="https://gabriel96x1.github.io/Multitude/">
 <link rel="alternate" hreflang="en" href="https://gabriel96x1.github.io/Multitude/">
 <link rel="alternate" hreflang="es" href="https://gabriel96x1.github.io/Multitude/es/">
 <link rel="alternate" hreflang="x-default" href="https://gabriel96x1.github.io/Multitude/">
 <link rel="alternate" type="text/plain" href="llms.txt" title="llms.txt (plain text for AI agents)">
-<meta property="og:title" content="Multitude — open several Unity prefabs at once, each in its own window">
-<meta property="og:description" content="Free, open-source Unity editor extension: open several prefabs at once, each in its own window with an isolated session and 3D preview. Unity 6.6+, editor only.">
+<meta property="og:title" content="Multitude — open several Unity prefabs at once">
+<meta property="og:description" content="Free, open-source Unity editor extension: open several prefabs at once, each in its own window with an isolated session and 3D preview. Unity 6.6+.">
 <meta property="og:image" content="https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png">
+<meta property="og:image:width" content="1120">
+<meta property="og:image:height" content="700">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="A Multitude window with a VFX prefab: hierarchy, 3D preview and component inspector.">
 <meta property="og:url" content="https://gabriel96x1.github.io/Multitude/">
 <meta property="og:site_name" content="Multitude">
@@ -24,8 +30,8 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Multitude — open several Unity prefabs at once, each in its own window">
-<meta name="twitter:description" content="Free, open-source Unity editor extension: open several prefabs at once, each in its own window with an isolated session and 3D preview. Unity 6.6+, editor only.">
+<meta name="twitter:title" content="Multitude — open several Unity prefabs at once">
+<meta name="twitter:description" content="Free, open-source Unity editor extension: open several prefabs at once, each in its own window with an isolated session and 3D preview. Unity 6.6+.">
 <meta name="twitter:image" content="https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png">
 <script type="application/ld+json">
 {
@@ -58,7 +64,11 @@
       "inLanguage": "en",
       "keywords": "Unity prefab editor, open multiple prefabs at once, Unity editor extension, prefab stage alternative, Unity 6 prefab tool, free Unity editor tool, open source Unity package, edit prefab in its own window",
       "image": "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
-      "screenshot": "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
+      "screenshot": [
+        "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
+        "https://gabriel96x1.github.io/Multitude/assets/img/prefab-window.png",
+        "https://gabriel96x1.github.io/Multitude/assets/img/inspector.png"
+      ],
       "datePublished": "2026-10-27",
       "author": {
         "@type": "Person",
@@ -68,7 +78,16 @@
       "sameAs": [
         "https://github.com/gabriel96x1/Multitude",
         "https://github.com/gabriel96x1/Multitude/releases"
-      ]
+      ],
+      "featureList": [
+        "One editor window per prefab, each with its own hierarchy, preview and inspector",
+        "Isolated edit sessions with Apply and Revert, nothing touches the open scene",
+        "Conflict detection before overwriting a prefab changed on disk",
+        "3D preview with orbit, pan, zoom and frame to selection",
+        "Particle systems and VFX play in edit mode with speed control",
+        "Editor only: no runtime assembly, no build impact"
+      ],
+      "dateModified": "2026-10-27"
     },
     {
       "@type": "SoftwareSourceCode",
@@ -179,7 +198,7 @@
   <section class="hero">
     <div class="wrap">
       <div>
-        <p class="eyebrow">Version 0.1.0 · editor only</p>
+        <p class="eyebrow">Unity editor extension · version 0.1.0 · free and open source</p>
         <h1>One prefab<br><em>per window.</em></h1>
         <p class="lede">
           Multitude opens several prefabs at once: each one with its own hierarchy, its own 3D preview and
@@ -199,7 +218,10 @@
       </div>
 
       <figure class="shot">
-        <img src="assets/img/vfx-window.png" width="1120" height="700" alt="A Multitude window with a fire impact prefab: hierarchy on the left, the effect playing in the 3D preview, and the component inspector below.">
+        <picture>
+          <source type="image/webp" srcset="assets/img/vfx-window-1120.webp 1120w, assets/img/vfx-window-2240.webp 2240w" sizes="(max-width: 900px) 100vw, 1120px">
+          <img src="assets/img/vfx-window.png" width="1120" height="700" alt="A Multitude window with a fire impact prefab: hierarchy on the left, the effect playing in the 3D preview, and the component inspector below." fetchpriority="high" decoding="async">
+        </picture>
         <figcaption>VFX prefab playing inside its own window — no play mode, no scene.</figcaption>
       </figure>
     </div>
@@ -317,12 +339,18 @@
 
       <div class="gallery">
         <figure class="shot">
-          <img src="assets/img/prefab-window.png" width="1120" height="700" alt="A Multitude window editing a character prefab: hierarchy on the left, the selected object highlighted in the 3D preview, and its Transform fields below.">
+          <picture>
+          <source type="image/webp" srcset="assets/img/prefab-window-1120.webp 1120w, assets/img/prefab-window-2240.webp 2240w" sizes="(max-width: 900px) 100vw, 1120px">
+          <img src="assets/img/prefab-window.png" width="1120" height="700" alt="A Multitude window editing a character prefab: hierarchy on the left, the selected object highlighted in the 3D preview, and its Transform fields below." loading="lazy" decoding="async">
+        </picture>
           <figcaption>Hierarchy, preview and inspector of one prefab — with the selection highlighted in the view.</figcaption>
         </figure>
 
         <figure class="shot">
-          <img src="assets/img/inspector.png" width="710" height="332" alt="Component inspector showing Transform with position, rotation and scale values, and a MeshFilter below.">
+          <picture>
+          <source type="image/webp" srcset="assets/img/inspector-710.webp 710w, assets/img/inspector-1420.webp 1420w" sizes="(max-width: 900px) 100vw, 710px">
+          <img src="assets/img/inspector.png" width="710" height="332" alt="Component inspector showing Transform with position, rotation and scale values, and a MeshFilter below." loading="lazy" decoding="async">
+        </picture>
           <figcaption>Transform and component fields draw with Unity's own editors: numbers, undo and redo included.</figcaption>
         </figure>
       </div>
@@ -385,6 +413,35 @@
     </div>
   </section>
 
+
+  <section id="uses">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Where it helps</h2>
+        <p>Anywhere you would otherwise open the prefab stage, edit, close it, and try to remember where you were in your scene.</p>
+      </div>
+
+      <div class="step">
+        <h3>Iterating on visual effects</h3>
+        <p>Particle systems and VFX prefabs play inside the preview with Play/Pause, Restart, Loop and a 0.1x–2x speed slider, so you tune timing, scale and first frame without entering play mode and without dropping the prefab into a scene.</p>
+      </div>
+
+      <div class="step">
+        <h3>Comparing two versions of a prefab</h3>
+        <p>Open both in separate windows, each with its own hierarchy, camera and inspector layout, and apply the one you keep. Nothing is shared between windows, so a comparison never overwrites the other side.</p>
+      </div>
+
+      <div class="step">
+        <h3>Tweaking UI, props and prefab variants</h3>
+        <p>Ordinary prefabs and prefab variants are supported. Model prefabs are rejected with a message instead of opening a window that cannot work, and custom inspectors that need the prefab stage say so instead of failing.</p>
+      </div>
+
+      <div class="step">
+        <h3>Reviewing a prefab before committing</h3>
+        <p>The session is isolated, so what you see is exactly what Apply would write. If the file changed on disk in the meantime, Apply stops and asks before overwriting anything.</p>
+      </div>
+    </div>
+  </section>
 
   <section id="answers">
     <div class="wrap">

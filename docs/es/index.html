@@ -3,20 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Multitude — abre varios prefabs de Unity a la vez, cada uno en su ventana</title>
-<meta name="description" content="Extensión de editor para Unity, gratis y de código abierto: abre varios prefabs a la vez, cada uno en su ventana con sesión aislada y vista 3D. Unity 6.6+, solo editor.">
+<title>Multitude — abre varios prefabs de Unity a la vez</title>
+<meta name="description" content="Extensión de editor para Unity, gratis y de código abierto: abre varios prefabs a la vez, cada uno en su ventana con sesión aislada y vista 3D. Unity 6.6+.">
 <meta name="keywords" content="editor de prefabs Unity, abrir varios prefabs a la vez, extensión de editor Unity, Unity 6, código abierto, alternativa al prefab stage, herramienta gratis para Unity">
 <meta name="author" content="Gabriel RZ">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#1c1c1c">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="../assets/img/vfx-window-1120.webp" imagesrcset="../assets/img/vfx-window-1120.webp 1120w, ../assets/img/vfx-window-2240.webp 2240w" imagesizes="(max-width: 900px) 100vw, 1120px" fetchpriority="high">
 <link rel="canonical" href="https://gabriel96x1.github.io/Multitude/es/">
 <link rel="alternate" hreflang="en" href="https://gabriel96x1.github.io/Multitude/">
 <link rel="alternate" hreflang="es" href="https://gabriel96x1.github.io/Multitude/es/">
 <link rel="alternate" hreflang="x-default" href="https://gabriel96x1.github.io/Multitude/">
 <link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt (texto plano para agentes de IA)">
-<meta property="og:title" content="Multitude — abre varios prefabs de Unity a la vez, cada uno en su ventana">
-<meta property="og:description" content="Extensión de editor para Unity, gratis y de código abierto: abre varios prefabs a la vez, cada uno en su ventana con sesión aislada y vista 3D. Unity 6.6+, solo editor.">
+<meta property="og:title" content="Multitude — abre varios prefabs de Unity a la vez">
+<meta property="og:description" content="Extensión de editor para Unity, gratis y de código abierto: abre varios prefabs a la vez, cada uno en su ventana con sesión aislada y vista 3D. Unity 6.6+.">
 <meta property="og:image" content="https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png">
+<meta property="og:image:width" content="1120">
+<meta property="og:image:height" content="700">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Una ventana de Multitude con un prefab de VFX: jerarquía, vista 3D e inspector de componentes.">
 <meta property="og:url" content="https://gabriel96x1.github.io/Multitude/es/">
 <meta property="og:site_name" content="Multitude">
@@ -24,8 +30,8 @@
 <meta property="og:locale" content="es_ES">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Multitude — abre varios prefabs de Unity a la vez, cada uno en su ventana">
-<meta name="twitter:description" content="Extensión de editor para Unity, gratis y de código abierto: abre varios prefabs a la vez, cada uno en su ventana con sesión aislada y vista 3D. Unity 6.6+, solo editor.">
+<meta name="twitter:title" content="Multitude — abre varios prefabs de Unity a la vez">
+<meta name="twitter:description" content="Extensión de editor para Unity, gratis y de código abierto: abre varios prefabs a la vez, cada uno en su ventana con sesión aislada y vista 3D. Unity 6.6+.">
 <meta name="twitter:image" content="https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png">
 <script type="application/ld+json">
 {
@@ -58,7 +64,11 @@
       "inLanguage": "es",
       "keywords": "editor de prefabs Unity, abrir varios prefabs a la vez, extensión de editor Unity, Unity 6, código abierto, alternativa al prefab stage, herramienta gratis para Unity",
       "image": "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
-      "screenshot": "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
+      "screenshot": [
+        "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
+        "https://gabriel96x1.github.io/Multitude/assets/img/prefab-window.png",
+        "https://gabriel96x1.github.io/Multitude/assets/img/inspector.png"
+      ],
       "datePublished": "2026-10-27",
       "author": {
         "@type": "Person",
@@ -68,7 +78,16 @@
       "sameAs": [
         "https://github.com/gabriel96x1/Multitude",
         "https://github.com/gabriel96x1/Multitude/releases"
-      ]
+      ],
+      "featureList": [
+        "Una ventana de editor por prefab, con su jerarquía, su vista previa y su inspector",
+        "Sesiones de edición aisladas con Apply y Revert, sin tocar la escena abierta",
+        "Detección de conflictos antes de sobrescribir un prefab cambiado en disco",
+        "Vista 3D con órbita, paneo, zoom y encuadre a la selección",
+        "Particle systems y VFX se reproducen en modo edición con control de velocidad",
+        "Solo editor: sin ensamblado de runtime, sin impacto en el build"
+      ],
+      "dateModified": "2026-10-27"
     },
     {
       "@type": "SoftwareSourceCode",
@@ -179,7 +198,7 @@
   <section class="hero">
     <div class="wrap">
       <div>
-        <p class="eyebrow">Versión 0.1.0 · solo editor</p>
+        <p class="eyebrow">Extensión de editor para Unity · versión 0.1.0 · gratis y código abierto</p>
         <h1>Un prefab<br><em>por ventana.</em></h1>
         <p class="lede">
           Multitude abre varios prefabs a la vez: cada uno con su jerarquía, su vista 3D y su inspector.
@@ -199,7 +218,10 @@
       </div>
 
       <figure class="shot">
-        <img src="../assets/img/vfx-window.png" width="1120" height="700" alt="Ventana de Multitude con un prefab de impacto de fuego: jerarquía a la izquierda, el efecto reproduciéndose en la vista 3D y el inspector de componentes debajo.">
+        <picture>
+          <source type="image/webp" srcset="../assets/img/vfx-window-1120.webp 1120w, ../assets/img/vfx-window-2240.webp 2240w" sizes="(max-width: 900px) 100vw, 1120px">
+          <img src="../assets/img/vfx-window.png" width="1120" height="700" alt="Ventana de Multitude con un prefab de impacto de fuego: jerarquía a la izquierda, el efecto reproduciéndose en la vista 3D y el inspector de componentes debajo." fetchpriority="high" decoding="async">
+        </picture>
         <figcaption>Un prefab de VFX reproduciéndose en su propia ventana — sin play mode y sin escena.</figcaption>
       </figure>
     </div>
@@ -317,12 +339,18 @@
 
       <div class="gallery">
         <figure class="shot">
-          <img src="../assets/img/prefab-window.png" width="1120" height="700" alt="Ventana de Multitude editando un prefab de personaje: jerarquía a la izquierda, el objeto seleccionado resaltado en la vista 3D y sus campos de Transform debajo.">
+          <picture>
+          <source type="image/webp" srcset="../assets/img/prefab-window-1120.webp 1120w, ../assets/img/prefab-window-2240.webp 2240w" sizes="(max-width: 900px) 100vw, 1120px">
+          <img src="../assets/img/prefab-window.png" width="1120" height="700" alt="Ventana de Multitude editando un prefab de personaje: jerarquía a la izquierda, el objeto seleccionado resaltado en la vista 3D y sus campos de Transform debajo." loading="lazy" decoding="async">
+        </picture>
           <figcaption>Jerarquía, vista previa e inspector de un prefab, con la selección resaltada en la vista.</figcaption>
         </figure>
 
         <figure class="shot">
-          <img src="../assets/img/inspector.png" width="710" height="332" alt="Inspector de componentes mostrando Transform con position, rotation y scale, y un MeshFilter debajo.">
+          <picture>
+          <source type="image/webp" srcset="../assets/img/inspector-710.webp 710w, ../assets/img/inspector-1420.webp 1420w" sizes="(max-width: 900px) 100vw, 710px">
+          <img src="../assets/img/inspector.png" width="710" height="332" alt="Inspector de componentes mostrando Transform con position, rotation y scale, y un MeshFilter debajo." loading="lazy" decoding="async">
+        </picture>
           <figcaption>Transform y componentes se dibujan con los editores de Unity: números, undo y redo incluidos.</figcaption>
         </figure>
       </div>
@@ -385,6 +413,35 @@
     </div>
   </section>
 
+
+  <section id="usos">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Dónde ayuda</h2>
+        <p>En cualquier momento en el que hoy abrirías el prefab stage, editarías, lo cerrarías e intentarías recordar por dónde ibas en tu escena.</p>
+      </div>
+
+      <div class="step">
+        <h3>Iterar efectos visuales</h3>
+        <p>Los particle systems y prefabs de VFX se reproducen dentro de la vista previa con Play/Pause, Restart, Loop y un control de velocidad de 0.1x a 2x, así ajustas tiempos, escala y primer frame sin entrar en play mode y sin meter el prefab en una escena.</p>
+      </div>
+
+      <div class="step">
+        <h3>Comparar dos versiones de un prefab</h3>
+        <p>Abre las dos en ventanas separadas, cada una con su jerarquía, su cámara y su reparto de inspector, y aplica la que te quedes. Nada se comparte entre ventanas, así que comparar nunca sobrescribe el otro lado.</p>
+      </div>
+
+      <div class="step">
+        <h3>Tocar UI, props y variantes de prefab</h3>
+        <p>Admite prefabs normales y variantes. Los model prefabs se rechazan con un mensaje en vez de abrir una ventana que no puede funcionar, y los inspectores personalizados que necesitan el prefab stage lo avisan en lugar de romperse.</p>
+      </div>
+
+      <div class="step">
+        <h3>Revisar un prefab antes de commitear</h3>
+        <p>La sesión está aislada, así que lo que ves es exactamente lo que escribiría Apply. Si el archivo cambió en disco mientras tanto, Apply se detiene y pregunta antes de sobrescribir.</p>
+      </div>
+    </div>
+  </section>
 
   <section id="respuestas">
     <div class="wrap">
