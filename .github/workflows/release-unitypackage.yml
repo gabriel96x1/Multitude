@@ -1,0 +1,326 @@
+name: Release package
+
+# Publishes two installable artifacts whenever a pull request is merged into master:
+#
+#   Multitude-<version>.unitypackage   double click / drag into the Project window
+#   com.gabs.multitude-<version>.tgz   Package Manager › + › Add package from tarball
+#
+# The repository root IS the UPM package, and a .unitypackage can only be produced by a Unity
+# editor, so the "package" job scaffolds a throwaway project, copies the package sources into
+# Assets/Multitude, runs the EditMode suite as a gate and exports the folder with
+# ci/PackageExporter.cs. The "tarball" job needs no editor at all.
+#
+# Prerequisites (repository secrets) — see Documentation~/RELEASING.md:
+#   UNITY_LICENSE        the Unity 6000.6.2f1 .ulf licence (XML, or its base64) — required
+#   DOCKERHUB_USERNAME   optional, authenticated image pull (200 / 6 h per user instead of
+#   DOCKERHUB_TOKEN      100 / 6 h per shared IP). Without them the pull is anonymous.
+#
+# Verified 2026-10-27: `docker manifest inspect unityci/editor:ubuntu-6000.6.2f1-base-3` returns an
+# OCI index for linux/amd64. The "-base-" variant is the editor with no scripting backend, which is
+# all an export job needs; it keeps the container small enough for the ~14 GB runner disk.
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Rebuild even if the tag v<version> already exists"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  # One release at a time, never cancelled: two merges landing together must not race for the
+  # same tag or interleave their release assets.
+  group: release-package
+  cancel-in-progress: false
+
+env:
+  UNITY_VERSION: 6000.6.2f1
+  # base = editor only. Do not switch to the il2cpp variant: this job never builds a player and
+  # the runner (ubuntu-latest, ~14 GB) cannot hold that image plus a project Library.
+  UNITY_IMAGE: unityci/editor:ubuntu-6000.6.2f1-base-3
+  UNITY_PATH: /opt/unity/Editor/Unity
+  PROJECT: /tmp/project
+
+jobs:
+  prepare:
+    name: Validate version and tag
+    # Only when the PR was actually merged, not merely closed
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      unity_min: ${{ steps.version.outputs.unity_min }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read and validate version
+        id: version
+        run: |
+          set -euo pipefail
+          VERSION=$(python3 -c "import json;print(json.load(open('package.json'))['version'])")
+          UNITY_MIN=$(python3 -c "import json;print(json.load(open('package.json'))['unity'])")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "unity_min=$UNITY_MIN" >> "$GITHUB_OUTPUT"
+          echo "package.json: version $VERSION, unity >= $UNITY_MIN"
+
+          grep -q "^## \[$VERSION\]" CHANGELOG.md || {
+            echo "::error::CHANGELOG.md has no '## [$VERSION]' section"; exit 1; }
+
+          # Risk guard: the editor used to compile must satisfy the version the package declares,
+          # otherwise a user on 6000.6.x can hit APIs CI never compiled.
+          case "$UNITY_VERSION" in
+            "$UNITY_MIN".*) echo "editor $UNITY_VERSION satisfies the declared $UNITY_MIN" ;;
+            *) echo "::error::UNITY_VERSION $UNITY_VERSION does not match the declared unity $UNITY_MIN"; exit 1 ;;
+          esac
+
+      - name: Refuse to republish an existing tag
+        run: |
+          set -euo pipefail
+          V="${{ steps.version.outputs.version }}"
+          if git rev-parse -q --verify "refs/tags/v$V" >/dev/null; then
+            if [ "${{ inputs.force }}" = "true" ]; then
+              echo "::warning::tag v$V already exists, rebuilding because force was requested"
+            else
+              echo "::error::tag v$V already exists — bump version in package.json"; exit 1
+            fi
+          fi
+
+  tarball:
+    name: Build UPM tarball
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build .tgz
+        run: |
+          set -euo pipefail
+          mkdir -p build staging/com.gabs.multitude
+          git archive --format=tar HEAD -o /tmp/head.tar
+          tar -xf /tmp/head.tar -C staging/com.gabs.multitude
+          # Packaging tooling and the landing page never belong inside the package itself.
+          rm -rf staging/com.gabs.multitude/.github \
+                 staging/com.gabs.multitude/ci \
+                 staging/com.gabs.multitude/docs \
+                 staging/com.gabs.multitude/docs.meta   # orphan meta of the removed folder
+          (cd staging && npm pack ./com.gabs.multitude --pack-destination ../build)
+          ls -l build
+
+      - name: Verify the tarball
+        run: |
+          set -euo pipefail
+          TGZ="build/com.gabs.multitude-${{ needs.prepare.outputs.version }}.tgz"
+          test -s "$TGZ" || { echo "::error::$TGZ missing"; exit 1; }
+          tar -tzf "$TGZ" > /tmp/tgz.txt
+          grep -qx 'package/package.json' /tmp/tgz.txt || { echo "::error::no package.json"; exit 1; }
+          grep -q '^package/Editor/Multitude.Editor.asmdef$' /tmp/tgz.txt || {
+            echo "::error::no editor asmdef"; exit 1; }
+          ! grep -q '^package/docs/' /tmp/tgz.txt || { echo "::error::landing shipped"; exit 1; }
+          ! grep -q '^package/ci/' /tmp/tgz.txt || { echo "::error::ci tooling shipped"; exit 1; }
+          echo "tarball entries: $(wc -l < /tmp/tgz.txt)"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: multitude-${{ needs.prepare.outputs.version }}-tgz
+          path: build/*.tgz
+          if-no-files-found: error
+
+  package:
+    name: Build .unitypackage
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    container:
+      image: unityci/editor:ubuntu-6000.6.2f1-base-3
+      credentials:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      options: --user root
+    env:
+      PACKAGE_VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Trust the checkout (container runs as root)
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Install the Unity licence
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        run: |
+          set -euo pipefail
+          if [ -z "${UNITY_LICENSE:-}" ]; then
+            echo "::error::secret UNITY_LICENSE is empty — see Documentation~/RELEASING.md"; exit 1
+          fi
+          mkdir -p /root/.local/share/unity3d/Unity
+          LICENSE_FILE=/root/.local/share/unity3d/Unity/Unity_lic.ulf
+          case "$UNITY_LICENSE" in
+            # XML licence straight out of license.unity3d.com
+            "<?xml"*) printf '%s' "$UNITY_LICENSE" > "$LICENSE_FILE" ;;
+            # base64 of that XML, which is what `base64 -w0 Unity_v6000.x.ulf` produces
+            *) printf '%s' "$UNITY_LICENSE" | base64 -d > "$LICENSE_FILE" ;;
+          esac
+          test -s "$LICENSE_FILE" || { echo "::error::licence file is empty"; exit 1; }
+          echo "licence installed ($(wc -c < "$LICENSE_FILE") bytes)"
+
+      - name: Scaffold throwaway Unity project
+        run: |
+          set -euo pipefail
+          "$UNITY_PATH" -batchmode -quit -nographics -createProject "$PROJECT" -logFile /tmp/create.log \
+            || { tail -40 /tmp/create.log; exit 1; }
+
+          mkdir -p "$PROJECT/Assets/Multitude" "$PROJECT/Assets/CiTools/Editor"
+          # shipped folders only: no Tests, no docs, no Documentation~ (Unity ignores ~ folders,
+          # so it could never travel inside a .unitypackage anyway), no CI tooling
+          for item in Editor package.json README.md CHANGELOG.md LICENSE licenses; do
+            if [ -e "$item" ]; then
+              cp -R "$item" "$PROJECT/Assets/Multitude/"
+              # keep the folder/file GUIDs stable across imports
+              [ -e "$item.meta" ] && cp "$item.meta" "$PROJECT/Assets/Multitude/" || true
+            fi
+          done
+          cp ci/PackageExporter.cs "$PROJECT/Assets/CiTools/Editor/"
+
+          # the tests travel to the throwaway project but are removed before exporting
+          mkdir -p "$PROJECT/Assets/Multitude/Tests"
+          cp -R Tests/. "$PROJECT/Assets/Multitude/Tests/"
+          [ -e Tests.meta ] && cp Tests.meta "$PROJECT/Assets/Multitude/" || true
+
+          # UNITY_INCLUDE_TESTS assemblies only compile when the test framework is present, and
+          # -createProject does not ship it in Unity 6000.6 (verified on the local editor).
+          # sed instead of python3: the unityci base image does not guarantee a python3 binary.
+          if ! grep -q 'com.unity.test-framework' "$PROJECT/Packages/manifest.json"; then
+            sed -i 's/"dependencies": {/"dependencies": {\n    "com.unity.test-framework": "1.8.0",/' \
+              "$PROJECT/Packages/manifest.json"
+          fi
+          grep -n 'test-framework' "$PROJECT/Packages/manifest.json"
+
+      - name: Run EditMode tests (gate)
+        run: |
+          set +e
+          "$UNITY_PATH" -batchmode -nographics -projectPath "$PROJECT" \
+            -runTests -testPlatform EditMode \
+            -testResults "$GITHUB_WORKSPACE/results.xml" \
+            -logFile /tmp/tests.log
+          code=$?
+          set -e
+          echo "unity exit code: $code"
+          tail -40 /tmp/tests.log || true
+
+          # Unity: 0 = all passed, 2 = tests failed, 3 = the run never started (licence, import, crash)
+          case "$code" in
+            0) ;;
+            2) echo "::error::EditMode tests failed"; exit 1 ;;
+            *) echo "::error::Unity test run failed before reporting (infrastructure)"; exit 1 ;;
+          esac
+
+          COUNT=$(grep -o 'testcasecount="[0-9]*"' results.xml | head -1 | grep -o '[0-9]*' || echo 0)
+          echo "tests reported: $COUNT"
+          # A green run that compiled no test assembly reports 0 — that is a decorative gate.
+          test "$COUNT" -ge 32 || { echo "::error::expected at least 32 tests, got $COUNT"; exit 1; }
+
+      - name: Export .unitypackage
+        run: |
+          set -euo pipefail
+          # never ship the tests, and drop the orphan .meta too: Unity recreates an empty
+          # Tests/ from it, which then shows up in the asset database during the export
+          rm -rf "$PROJECT/Assets/Multitude/Tests" "$PROJECT/Assets/Multitude/Tests.meta"
+          "$UNITY_PATH" -batchmode -quit -nographics -projectPath "$PROJECT" \
+            -executeMethod Multitude.Ci.PackageExporter.Export -logFile /tmp/export.log \
+            || { tail -100 /tmp/export.log; exit 1; }
+          mkdir -p "$GITHUB_WORKSPACE/build"
+          cp "$PROJECT"/build/*.unitypackage "$GITHUB_WORKSPACE/build/"
+          ls -l "$GITHUB_WORKSPACE/build"
+
+      - name: Verify the archive
+        run: |
+          set -euo pipefail
+          FILE="build/Multitude-$PACKAGE_VERSION.unitypackage"
+          test -s "$FILE" || { echo "::error::$FILE missing or empty"; exit 1; }
+
+          SIZE=$(stat -c%s "$FILE")
+          echo "archive size: $SIZE bytes"
+          test "$SIZE" -gt 20000 || { echo "::error::archive suspiciously small"; exit 1; }
+
+          # a .unitypackage is a gzipped tar of <guid>/{pathname,asset,asset.meta,...}
+          tar -tzf "$FILE" | grep -E '/pathname$' > /tmp/entries.txt || {
+            echo "::error::not a unitypackage archive"; exit 1; }
+          while IFS= read -r entry; do
+            tar -xzOf "$FILE" "$entry"
+            echo
+          done < /tmp/entries.txt > /tmp/paths.txt
+
+          echo "--- exported paths (first 20) ---"
+          head -20 /tmp/paths.txt
+
+          grep -qx 'Assets/Multitude/Editor/Multitude.Editor.asmdef' /tmp/paths.txt || {
+            echo "::error::editor asmdef missing from the archive"; exit 1; }
+          grep -qx 'Assets/Multitude/package.json' /tmp/paths.txt || {
+            echo "::error::package.json missing from the archive"; exit 1; }
+          ! grep -q '/Tests' /tmp/paths.txt || { echo "::error::tests shipped"; exit 1; }
+          ! grep -q 'Documentation~' /tmp/paths.txt || { echo "::error::Documentation~ shipped"; exit 1; }
+          ! grep -q 'CiTools' /tmp/paths.txt || { echo "::error::CI tooling shipped"; exit 1; }
+
+          COUNT=$(wc -l < /tmp/paths.txt)
+          echo "archive entries: $COUNT"
+          test "$COUNT" -ge 20 || { echo "::error::archive looks truncated ($COUNT entries)"; exit 1; }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: multitude-${{ needs.prepare.outputs.version }}-unitypackage
+          path: build/*.unitypackage
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    needs: [prepare, tarball, package]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: multitude-${{ needs.prepare.outputs.version }}-*
+          path: build
+          merge-multiple: true
+
+      - name: Extract the changelog section
+        run: |
+          set -euo pipefail
+          VERSION="${{ needs.prepare.outputs.version }}"
+          awk -v v="$VERSION" '
+            $0 ~ "^## \\[" v "\\]" {flag=1; next}
+            /^## \[/ {flag=0}
+            flag' CHANGELOG.md > /tmp/notes.md
+          if [ ! -s /tmp/notes.md ]; then echo "Release $VERSION" > /tmp/notes.md; fi
+          echo "--- release notes ---"
+          cat /tmp/notes.md
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          ls -l build
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            # only reachable with force: the tag check in `prepare` refuses everything else
+            echo "::warning::release v$VERSION exists, replacing its assets"
+            gh release upload "v$VERSION" build/* --clobber
+          else
+            gh release create "v$VERSION" build/* \
+              --title "Multitude $VERSION" \
+              --notes-file /tmp/notes.md \
+              --target "$GITHUB_SHA"
+          fi
+          gh release view "v$VERSION" --json url,assets --jq '.url, (.assets[].name)'
