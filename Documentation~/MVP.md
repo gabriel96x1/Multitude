@@ -14,6 +14,22 @@ Packages/com.gabs.multitude/
 Unity imports it automatically. Open the window from `Tools > Multitude > Open Selected Prefabs`, or
 right click a prefab in the Project window and choose `Assets > Multitude > Open Prefab in Multitude`.
 
+### Packaging
+
+Every merge into `master` publishes a GitHub Release with `Multitude-<version>.unitypackage` and
+`com.gabs.multitude-<version>.tgz`, built by `.github/workflows/release-unitypackage.yml` from the same
+commit (see `Documentation~/RELEASING.md`).
+
+The `.unitypackage` contains `Editor/`, `package.json`, `README.md`, `CHANGELOG.md`, `LICENSE` and
+`licenses/`, and nothing else:
+
+- `Tests/` is not shipped. It only makes sense with the test framework and `testables` wired up, so it
+  travels in the `.tgz` (and in a git URL install) where it can actually be run.
+- `Documentation~/` can never be shipped: Unity ignores folders whose name ends in `~`, so they are
+  invisible to the asset database and an export silently drops them. The `.unitypackage` only carries
+  `README.md`; the full documentation lives in the repository and on the landing page.
+- `docs/` (the landing page) and `ci/` (the export tooling) are not part of the package at all.
+
 ## Usage
 
 - **One window per prefab.** Open as many as you want; each keeps its own hierarchy, selection and

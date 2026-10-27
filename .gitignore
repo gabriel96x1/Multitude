@@ -107,3 +107,10 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# macOS
+.DS_Store
+
+# CI packaging (see .github/workflows/release-unitypackage.yml)
+/staging/
+/build/

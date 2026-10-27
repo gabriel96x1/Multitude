@@ -10,7 +10,7 @@ changed on disk in the meantime, Apply refuses to overwrite it and asks you what
 ![A Multitude window playing a VFX prefab](docs/assets/img/vfx-window.png)
 
 **Landing page:** open `docs/index.html` locally, or enable GitHub Pages with *Settings → Pages →
-Deploy from branch → `main` / `/docs`* and it will be served at
+Deploy from branch → `master` / `/docs`* and it will be served at
 `https://<your-user>.github.io/Multitude/`.
 
 ## Requirements
@@ -23,6 +23,19 @@ Deploy from branch → `main` / `/docs`* and it will be served at
 
 ## Install
 
+Every merge into `master` publishes a [release](https://github.com/gabriel96x1/Multitude/releases) with two
+installable files, built by CI from the same commit:
+
+| Route | How | Updates itself |
+|---|---|---|
+| **Git URL** (recommended) | `Window > Package Manager > + > Add package from git URL...` → `https://github.com/gabriel96x1/Multitude.git` | yes, pin with `#v0.1.0` or a commit hash |
+| **Tarball** | download `com.gabs.multitude-<version>.tgz` and use `+ > Add package from tarball...` | no, replace the file to update |
+| **`.unitypackage`** | download `Multitude-<version>.unitypackage` and drag it into the Project window, or double click it | no |
+
+The `.unitypackage` imports the sources into `Assets/Multitude/` instead of `Packages/`. Pick it when you want
+the code inside your project (no package manager, easy to tweak); pick one of the package routes when you want
+to update it later. **Do not install both at once** — the same types would be compiled twice.
+
 **Local path (development):** in `Packages/manifest.json` of your project add
 
 ```json
@@ -31,13 +44,9 @@ Deploy from branch → `main` / `/docs`* and it will be served at
 
 or use `Window > Package Manager > + > Add package from disk...` and pick this folder's `package.json`.
 
-**Git URL (once the repository is published):** `Window > Package Manager > + > Add package from git URL...`
-
-```
-https://github.com/<your-user>/Multitude.git
-```
-
-You can pin a version with `#v0.1.0` or a commit hash.
+The `.unitypackage` carries `Editor/`, `package.json`, `README.md`, `CHANGELOG.md`, `LICENSE` and `licenses/`.
+It does not carry `Tests/` (install through a package route if you want them) nor `Documentation~/`, because
+Unity ignores `~` folders and they can never travel inside a `.unitypackage`.
 
 ## Usage
 
