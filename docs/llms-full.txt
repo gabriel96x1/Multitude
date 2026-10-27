@@ -1,0 +1,320 @@
+# Multitude — full text dump
+
+> Free, open-source Unity editor extension: several prefabs open at once, each in its own window.
+> Repo: https://github.com/gabriel96x1/Multitude   Landing: https://gabriel96x1.github.io/Multitude/   License: LGPL-3.0 or AGPL-3.0   Version: 0.1.0
+
+
+# === README (README.md) ===
+
+# Multitude
+
+Edit several prefab assets at the same time, each one in its own window, without touching the scene you
+have open and without going through Unity's prefab stage.
+
+Each window owns an isolated session: its own hierarchy, its own preview, its own inspector. Changes
+stay inside the window until you press **Apply**; **Revert** throws them away. If the prefab file
+changed on disk in the meantime, Apply refuses to overwrite it and asks you what to do.
+
+![A Multitude window playing a VFX prefab](docs/assets/img/vfx-window.png)
+
+**Landing page:** open `docs/index.html` locally, or enable GitHub Pages with *Settings → Pages →
+Deploy from branch → `master` / `/docs`* and it will be served at
+`https://gabriel96x1.github.io/Multitude/`.
+
+## Requirements
+
+| | |
+|---|---|
+| Unity | **6000.6** (Unity 6.6) or newer |
+| Render pipeline | tested with URP 17.6; nothing pipeline specific in the code |
+| Platform | Editor only, no runtime assembly |
+
+## Install
+
+**Git URL (recommended):** `Window > Package Manager > + > Add package from git URL...`
+
+```
+https://github.com/gabriel96x1/Multitude.git
+```
+
+You can pin a version with `#v0.1.0` or a commit hash.
+
+**Released files:** each [release](https://github.com/gabriel96x1/Multitude/releases) carries two files:
+
+| File | How |
+|---|---|
+| `Multitude-<version>.unitypackage` | drag it into the Unity **Project** window, or double click it. Lands in `Assets/Multitude/` |
+| `com.gabs.multitude-<version>.tgz` | `+ > Add package from tarball...` |
+
+Pick **one** route: the `.unitypackage` puts the sources inside your project (easy to tweak, no package
+manager, no automatic updates), the package routes install it under `Packages/`. Installing both
+compiles the same types twice.
+
+**Local path (development):** in `Packages/manifest.json` of your project add
+
+```json
+"com.gabs.multitude": "file:../Multitude"
+```
+
+or use `Window > Package Manager > + > Add package from disk...` and pick this folder's `package.json`.
+
+**Build the files yourself:** `./scripts/build-package.sh` runs the tests and writes both artifacts to
+`build/`. Details, flags and what each one ships: [Documentation~/BUILDING.md](Documentation~/BUILDING.md).
+
+## Usage
+
+- `Assets > Multitude > Open Prefab in Multitude` (right click a prefab) or
+  `Tools > Multitude > Open Selected Prefabs`.
+- Preview: left drag orbits, right drag or `Alt`+left pans, the wheel zooms, `F` frames. Double click
+  an object in the hierarchy to frame it.
+- Drag the separators to resize the hierarchy column and the inspector; double click a separator to
+  reset its size. Each window remembers its own layout.
+- Particle systems and VFX play in the preview: `Play`/`Pause`, `Restart`, `Loop` and a speed slider.
+- `Apply` writes the prefab asset, `Revert` reloads it from disk, closing a dirty window asks first.
+
+Full details, limits and troubleshooting: [Documentation~/MVP.md](Documentation~/MVP.md).
+
+## How it stays isolated
+
+Unity renders any object that lives in a loaded scene, even with `HideAndDontSave`, so preview objects
+are created hidden, put on a private layer and taken out of every camera with
+`Renderer.forceRenderingOff`. They are switched on only while the preview renders its own frame, and
+left over copies are destroyed when scripts reload. Your scene, scene view, game view and prefab stage
+never see anything from Multitude.
+
+## Tests
+
+The package ships EditMode tests, included in the `.tgz` and in git URL installs (not in the
+`.unitypackage`). To run them, add the package to the testables of your project's
+`Packages/manifest.json`:
+
+```json
+"testables": ["com.gabs.multitude"]
+```
+
+Then open `Window > General > Test Runner > EditMode`.
+
+## Layout
+
+```
+package.json                  package manifest (Unity 6000.6+)
+Editor/Core/                  asset validation, snapshots, edit session
+Editor/UI/                    preview view, preview host, VFX playback, hierarchy, inspector
+Editor/Windows/               the per prefab window
+Editor/Commands/              menu entries
+Tests/Editor/                 EditMode tests
+Documentation~/MVP.md         usage, limits and troubleshooting
+docs/                         landing page (English in /, Spanish in /es/, GitHub Pages ready)
+scripts/                      local packaging: build-package.sh + PackageExporter.cs
+```
+
+## License
+
+Dual licensed: **LGPL-3.0** or **AGPL-3.0**, your choice per copy or distribution — the notice is in
+[LICENSE](LICENSE) and the full texts in [`licenses/`](licenses).
+
+- **LGPL-3.0** (`licenses/LGPL-3.0.txt`, which builds on `licenses/GPL-3.0.txt`) lets you ship
+  Multitude inside a closed product, as long as the library itself — and any modification you make to
+  it — stays under the LGPL and the user can replace it. This is the option that fits a sold or closed
+  Unity tool.
+- **AGPL-3.0** (`licenses/AGPL-3.0.txt`) is strong copyleft and also covers offering the tool as a
+  service.
+
+Neither option is permissive in the MIT sense: modifications to the library stay open. Weigh that
+before bundling it into a commercial asset.
+
+
+# === BUILDING (Documentation~/BUILDING.md) ===
+
+# Building the package
+
+Everything happens locally. There is no CI: `scripts/build-package.sh` runs the test suite and produces
+the two installable files, and the release is uploaded to GitHub by hand.
+
+```bash
+./scripts/build-package.sh
+```
+
+| Output | Install it with |
+|---|---|
+| `build/Multitude-<version>.unitypackage` | drag it into the Unity **Project** window (or double click it with the project open). Lands in `Assets/Multitude/` |
+| `build/com.gabs.multitude-<version>.tgz` | `Window > Package Manager > + > Add package from tarball...` |
+
+Do not install both at once: the same types would be compiled twice.
+
+## Options
+
+| Flag | Effect |
+|---|---|
+| `--skip-tests` | export only (the archive is still verified). Warm run: ~5 s |
+| `--no-tgz` | skip `npm pack`, `.unitypackage` only |
+| `--clean` | wipe `.build/` and reimport from scratch (needed after switching editor patch) |
+
+`UNITY_PATH=/path/to/Unity` overrides the editor. Otherwise the newest
+`/Applications/Unity/Hub/Editor/<unity field from package.json>*/Unity.app` is used.
+
+## What the script does
+
+1. Reads `version` and `unity` from `package.json` and picks a matching editor. The editor version is
+   part of the throwaway project path, because a `Library/` built by another patch produces import
+   errors that look like test failures.
+2. Creates (or reuses) `.build/project-<editor version>/`.
+3. Copies the package into `Assets/Multitude/`: `Editor/`, `package.json`, `README.md`,
+   `CHANGELOG.md`, `LICENSE`, `licenses/` **and** `Tests/`, plus `scripts/PackageExporter.cs` as
+   `Assets/CiTools/Editor/`. Root `.meta` files travel too so the GUIDs stay stable.
+4. Injects `com.unity.test-framework` into the project manifest. `-createProject` does not ship it in
+   Unity 6, and without it the `UNITY_INCLUDE_TESTS` test assembly never compiles — the suite would
+   report "0 tests" and look green.
+5. Runs the EditMode suite and fails if fewer than 32 tests ran or Unity exits with 2 (failed) or 3
+   (never started).
+6. Deletes `Tests/` **and** `Tests.meta` (Unity recreates an empty `Tests/` from an orphan `.meta`),
+   then exports `Assets/Multitude` with `AssetDatabase.ExportPackage`.
+7. Verifies the archive: it must contain the editor asmdef and `package.json`, and must not contain
+   `Tests/`, `Documentation~/` or `CiTools/`.
+8. Builds the UPM tarball with `git archive HEAD` + `npm pack`, minus `.github/`, `scripts/` and
+   `docs/`. The tarball therefore reflects the **last commit**, not the working tree: the script warns
+   when tracked files are dirty, and so does the `.unitypackage` if you commit after building.
+
+Logs live in `.build/` (`create.log`, `tests.log`, `export.log`, `results.xml`). Both `.build/` and
+`build/` are gitignored.
+
+## What ships, and what cannot
+
+The `.unitypackage` contains `Editor/`, `package.json`, `README.md`, `CHANGELOG.md`, `LICENSE` and
+`licenses/`.
+
+- `Tests/` is **not** in the `.unitypackage` (it needs the test framework and `testables` wired up);
+  it does travel in the `.tgz` and in git URL installs, where it can actually run.
+- `Documentation~/` can never travel inside a `.unitypackage`: Unity ignores folders ending in `~`, so
+  the export drops them silently. Inside the `.tgz` it is fine.
+- `docs/` (the landing page) and `scripts/` (build tooling) are not part of the package.
+
+## Uploading a release by hand
+
+Bump `version` in `package.json`, add the matching `## [<version>]` section to `CHANGELOG.md`, build,
+then:
+
+```bash
+gh release create v0.1.0 build/* --title "Multitude 0.1.0" --notes "First release"
+```
+
+Or drag both files into *Releases → Draft a new release* on GitHub. Tag names follow `v<version>`, and
+the git URL install can pin them (`#v0.1.0`).
+
+## Requirements
+
+- macOS with a Unity Hub editor matching the `unity` field of `package.json`, activated (Unity Personal
+  is enough — nothing here leaves the machine).
+- `python3` (reads `package.json`, patches the manifest) and `npm` (only for the `.tgz`).
+
+
+# === MVP NOTES (Documentation~/MVP.md) ===
+
+# Multitude — MVP
+
+Edit several prefab assets at the same time, each one in its own window, without touching the scene
+you have open and without going through Unity's prefab stage.
+
+## Install
+
+Multitude is an editor-only package embedded in this project:
+
+```
+Packages/com.gabs.multitude/
+```
+
+Unity imports it automatically. Open the window from `Tools > Multitude > Open Selected Prefabs`, or
+right click a prefab in the Project window and choose `Assets > Multitude > Open Prefab in Multitude`.
+
+### Packaging
+
+`./scripts/build-package.sh` runs the EditMode suite and writes `build/Multitude-<version>.unitypackage`
+plus the UPM tarball. The `.unitypackage` ships `Editor/` and the manifests only: no tests, no landing
+page, and `Documentation~/` can never travel inside it because Unity ignores folders ending in `~`. See
+`Documentation~/BUILDING.md`.
+
+## Usage
+
+- **One window per prefab.** Open as many as you want; each keeps its own hierarchy, selection and
+  camera. They can be docked or floated and survive a script reload (the unsaved edits do not).
+- **Preview:** left drag orbits, right drag (or `Alt` + left drag) pans, the wheel zooms, `F` frames
+  the prefab, `Frame` frames everything. Double click an object in the hierarchy to frame that object.
+- **Editing:** select an object in the hierarchy and edit its components in the inspector, exactly as
+  in the normal inspector (undo and redo work). Changes stay inside the window.
+- **Apply** writes the prefab asset. **Revert** throws the changes away and reloads from disk.
+- **Conflict:** if the prefab file changed on disk after you opened it, Apply refuses to overwrite and
+  offers Overwrite / Keep editing / Reload from disk.
+- **Closing a dirty window** asks Apply and close / Cancel / Discard and close. Cancel reopens the
+  window with the session intact (Unity cannot veto a window close, so the window comes back instead).
+
+### Particle systems and visual effects
+
+The preview plays particle systems in edit mode: `Play` / `Pause`, `Restart`, `Loop` and a speed
+slider between 0.1x and 2x. The systems are advanced by hand (`ParticleSystem.Simulate`), so nothing
+depends on entering play mode. The controls only appear when the prefab has particle systems.
+
+## How the preview stays isolated
+
+Two rules are enforced by the implementation:
+
+1. **Nothing of yours reaches the preview.** The window never reads the active scene, the scene view
+   or the prefab stage; it only renders the session's own copy of the prefab.
+2. **Nothing of Multitude reaches your scenes.** Preview copies live in the editor's hidden world with
+   `HideFlags.HideAndDontSave`, on a layer reserved for them, and with `Renderer.forceRenderingOff`
+   enabled, which removes them from the scene view and the game view. They are switched on only while
+   the preview renders its own frame, and left over copies are destroyed when the editor reloads
+   scripts.
+
+Unity does not render preview scenes in this project's render pipeline, which is why the preview draws
+a copy instead of the session content directly.
+
+## Limits (MVP)
+
+- Ordinary prefabs and prefab variants. Model prefabs and missing assets are rejected with a message.
+- Prefabs only: scenes and ScriptableObjects are out of scope.
+- Custom inspectors that assume the prefab stage or the global selection may draw incompletely; the
+  window reports it instead of breaking.
+- Unsaved edits do not survive a script recompile or a domain reload; the window reloads the prefab
+  from disk.
+- The preview updates ~0.35 s after an edit (it rebuilds the copy it renders), and while a session has
+  unapplied changes the window repaints a few times per second to keep up.
+- Editing a prefab asset on disk while the editor is in play mode can leave stale instances; leave play
+  mode before applying external edits.
+
+## Troubleshooting
+
+| Symptom | Cause / fix |
+|---|---|
+| The window says the preview is not available | The prefab no longer loads. Press `Revert` or reopen the window. |
+| Nothing appears in the preview | The prefab has no renderers or colliders. A pure particle prefab needs some time to emit; press `Restart`. |
+| An inspector shows a warning instead of its fields | That custom editor needs the prefab stage; edit through the fields that did draw. |
+| Apply reports a conflict | The file changed on disk. Choose Overwrite only if you mean it, or Reload from disk. |
+
+
+# === CHANGELOG (CHANGELOG.md) ===
+
+# Changelog
+
+All notable changes to this package are documented here. The format follows
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the package uses
+[Semantic Versioning](https://semver.org/).
+
+## [0.1.0] - 2026-10-26
+
+First version, extracted from the game project it was built in.
+
+### Added
+
+- One editor window per prefab asset: hierarchy, isolated preview and component inspector, all
+  independent between windows.
+- Isolated sessions: a prefab is loaded into its own preview scene and stays clean until **Apply**;
+  **Revert** reloads it from disk.
+- External change protection: Apply compares the file on disk against the snapshot taken when the
+  window opened and offers Overwrite, Keep editing or Reload from disk instead of overwriting silently.
+- Dirty close handling with Apply and close, Cancel (the window comes back with the session intact) and
+  Discard and close.
+- Rotating preview: orbit, pan, zoom, frame to prefab or to a single object, selection highlight.
+- Particle systems and VFX play in edit mode with Play/Pause, Restart, Loop and a speed slider.
+- Resizable panes: draggable separators for the hierarchy width and the inspector height, remembered
+  per window, double click to reset.
+- EditMode tests for validation, session states, apply/revert/conflict, preview host and VFX playback.

@@ -1,0 +1,42 @@
+# Multitude - crawlers welcome, including AI agents. The project is free and open source
+# (LGPL-3.0 / AGPL-3.0); quoting, indexing and summarising this site is fine, attribution appreciated.
+# Note: this file lives at a project path (/Multitude/robots.txt), which robots-aware crawlers do not
+# read; only the domain root robots.txt is honoured. It is kept here for completeness and for mirrors.
+
+User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+Sitemap: https://gabriel96x1.github.io/Multitude/sitemap.xml

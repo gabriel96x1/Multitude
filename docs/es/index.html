@@ -3,13 +3,154 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Multitude — un prefab por ventana, en Unity</title>
-<meta name="description" content="Multitude abre varios prefabs de Unity a la vez, cada uno en su ventana con sesión aislada, vista 3D e inspector real. Aplica o descarta, sin sobrescribir por accidente.">
+<title>Multitude — abre varios prefabs de Unity a la vez, cada uno en su ventana</title>
+<meta name="description" content="Extensión de editor para Unity, gratis y de código abierto: abre varios prefabs a la vez, cada uno en su ventana con sesión aislada y vista 3D. Unity 6.6+, solo editor.">
+<meta name="keywords" content="editor de prefabs Unity, abrir varios prefabs a la vez, extensión de editor Unity, alternativa gratis a Multiverse, Unity 6, código abierto, alternativa al prefab stage">
+<meta name="author" content="Gabriel RZ">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="color-scheme" content="dark">
-<meta property="og:title" content="Multitude — un prefab por ventana, en Unity">
-<meta property="og:description" content="Varios prefabs abiertos a la vez, cada uno con su vista previa, su inspector y su reparto. Sin tocar tu escena.">
-<meta property="og:image" content="../assets/img/vfx-window.png">
+<link rel="canonical" href="https://gabriel96x1.github.io/Multitude/es/">
+<link rel="alternate" hreflang="en" href="https://gabriel96x1.github.io/Multitude/">
+<link rel="alternate" hreflang="es" href="https://gabriel96x1.github.io/Multitude/es/">
+<link rel="alternate" hreflang="x-default" href="https://gabriel96x1.github.io/Multitude/">
+<link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt (texto plano para agentes de IA)">
+<meta property="og:title" content="Multitude — abre varios prefabs de Unity a la vez, cada uno en su ventana">
+<meta property="og:description" content="Extensión de editor para Unity, gratis y de código abierto: abre varios prefabs a la vez, cada uno en su ventana con sesión aislada y vista 3D. Unity 6.6+, solo editor.">
+<meta property="og:image" content="https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png">
+<meta property="og:image:alt" content="Una ventana de Multitude con un prefab de VFX: jerarquía, vista 3D e inspector de componentes.">
+<meta property="og:url" content="https://gabriel96x1.github.io/Multitude/es/">
+<meta property="og:site_name" content="Multitude">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Multitude — abre varios prefabs de Unity a la vez, cada uno en su ventana">
+<meta name="twitter:description" content="Extensión de editor para Unity, gratis y de código abierto: abre varios prefabs a la vez, cada uno en su ventana con sesión aislada y vista 3D. Unity 6.6+, solo editor.">
+<meta name="twitter:image" content="https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://gabriel96x1.github.io/Multitude/#software",
+      "name": "Multitude",
+      "alternateName": "Multitude for Unity",
+      "description": "Multitude es una extensión de editor para Unity, gratuita y de código abierto (doble licencia LGPL-3.0 / AGPL-3.0) que abre varios prefabs a la vez, cada uno en su ventana con sesión aislada, vista 3D e inspector real. Unity 6000.6+ (Unity 6.6), solo editor, sin código en tiempo de ejecución y sin versión de pago.",
+      "applicationCategory": "DeveloperApplication",
+      "applicationSubCategory": "Unity Editor extension",
+      "operatingSystem": "Unity Editor 6000.6+ (Windows, macOS, Linux)",
+      "softwareRequirements": "Unity 6000.6 (Unity 6.6) or newer. Editor only.",
+      "softwareVersion": "0.1.0",
+      "programmingLanguage": "C#",
+      "isAccessibleForFree": true,
+      "license": "https://www.gnu.org/licenses/lgpl-3.0.html",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "downloadUrl": "https://github.com/gabriel96x1/Multitude/releases/download/v0.1.0/Multitude-0.1.0.unitypackage",
+      "installUrl": "https://github.com/gabriel96x1/Multitude.git",
+      "codeRepository": "https://github.com/gabriel96x1/Multitude",
+      "url": "https://gabriel96x1.github.io/Multitude/es/",
+      "inLanguage": "es",
+      "keywords": "Unity prefab editor, open multiple prefabs at once, Unity editor extension, prefab stage alternative, Unity 6 tool, free Multiverse alternative, open source Unity package, edit prefab in its own window",
+      "image": "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
+      "screenshot": "https://gabriel96x1.github.io/Multitude/assets/img/vfx-window.png",
+      "datePublished": "2026-10-27",
+      "author": {
+        "@type": "Person",
+        "name": "Gabriel RZ",
+        "url": "https://github.com/gabriel96x1"
+      },
+      "sameAs": [
+        "https://github.com/gabriel96x1/Multitude",
+        "https://github.com/gabriel96x1/Multitude/releases"
+      ]
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://gabriel96x1.github.io/Multitude/#source",
+      "name": "Multitude",
+      "codeRepository": "https://github.com/gabriel96x1/Multitude",
+      "programmingLanguage": "C#",
+      "runtimePlatform": "Unity Editor",
+      "license": "https://www.gnu.org/licenses/lgpl-3.0.html",
+      "isAccessibleForFree": true,
+      "version": "0.1.0",
+      "author": {
+        "@type": "Person",
+        "name": "Gabriel RZ"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://gabriel96x1.github.io/Multitude/es/#answers",
+      "inLanguage": "es",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cómo abro más de un prefab a la vez en Unity?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Unity solo ofrece un prefab stage cada vez. Multitude abre cada prefab en su propia ventana del editor, con su jerarquía, su vista 3D y su inspector, así que puedes editar varios a la vez sin salir de la escena que tienes abierta."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Multitude es gratis?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí. Es código abierto con doble licencia LGPL-3.0 o AGPL-3.0, sin versión de pago, sin cuenta y sin servidor de licencias. Herramientas de pago como Multiverse requieren suscripción; Multitude no."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿En qué se diferencia de Multiverse?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Multitude se inspira en la idea de Multiverse de una ventana por prefab, pero es gratuito y de código abierto, solo para el editor, y no añade código al build. Multiverse hoy requiere una licencia de pago."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Funciona con Unity 6?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí. Requiere Unity 6000.6 (Unity 6.6) o superior y se desarrolla y prueba con 6000.6.2f1. No depende del render pipeline; se probó con URP 17.6."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Puede modificar mis prefabs o mi escena sin avisar?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Cada ventana trabaja sobre una copia en una escena de previsualización oculta: nada se escribe hasta que pulsas Apply, y si el archivo cambió en disco te ofrece Sobrescribir, Seguir editando o Recargar desde disco."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Añade código en tiempo de ejecución a mi build?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. El paquete es un único ensamblado solo para editor: no hay ensamblado de runtime, así que no afecta al tamaño del build ni al player."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo instalo Multitude?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "De tres formas: descargar Multitude-0.1.0.unitypackage del release y arrastrarlo a la ventana Project; añadir el tarball .tgz desde el Package Manager; o añadir la git URL https://github.com/gabriel96x1/Multitude.git. Instala solo una de las tres."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -22,6 +163,7 @@
       <a href="#que-hace">Qué hace</a>
       <a href="#capturas">Capturas</a>
       <a href="#instalar">Instalar</a>
+      <a href="#respuestas">Respuestas</a>
       <a href="#licencia">Licencia</a>
       <a href="https://github.com/gabriel96x1/Multitude">GitHub</a>
     </nav>
@@ -243,6 +385,50 @@
     </div>
   </section>
 
+
+  <section id="respuestas">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Respuestas rápidas</h2>
+        <p>Las preguntas que salen antes de instalarlo. Son las mismas respuestas que están en los datos estructurados de la página, para que los asistentes las citen en vez de inventarlas.</p>
+      </div>
+
+      <div class="step">
+        <h3>¿Cómo abro más de un prefab a la vez en Unity?</h3>
+        <p>Unity solo ofrece un prefab stage cada vez. Multitude abre cada prefab en su propia ventana del editor, con su jerarquía, su vista 3D y su inspector, así que puedes editar varios a la vez sin salir de la escena que tienes abierta.</p>
+      </div>
+
+      <div class="step">
+        <h3>¿Multitude es gratis?</h3>
+        <p>Sí. Es código abierto con doble licencia LGPL-3.0 o AGPL-3.0, sin versión de pago, sin cuenta y sin servidor de licencias. Herramientas de pago como Multiverse requieren suscripción; Multitude no.</p>
+      </div>
+
+      <div class="step">
+        <h3>¿En qué se diferencia de Multiverse?</h3>
+        <p>Multitude se inspira en la idea de Multiverse de una ventana por prefab, pero es gratuito y de código abierto, solo para el editor, y no añade código al build. Multiverse hoy requiere una licencia de pago.</p>
+      </div>
+
+      <div class="step">
+        <h3>¿Funciona con Unity 6?</h3>
+        <p>Sí. Requiere Unity 6000.6 (Unity 6.6) o superior y se desarrolla y prueba con 6000.6.2f1. No depende del render pipeline; se probó con URP 17.6.</p>
+      </div>
+
+      <div class="step">
+        <h3>¿Puede modificar mis prefabs o mi escena sin avisar?</h3>
+        <p>No. Cada ventana trabaja sobre una copia en una escena de previsualización oculta: nada se escribe hasta que pulsas Apply, y si el archivo cambió en disco te ofrece Sobrescribir, Seguir editando o Recargar desde disco.</p>
+      </div>
+
+      <div class="step">
+        <h3>¿Añade código en tiempo de ejecución a mi build?</h3>
+        <p>No. El paquete es un único ensamblado solo para editor: no hay ensamblado de runtime, así que no afecta al tamaño del build ni al player.</p>
+      </div>
+
+      <div class="step">
+        <h3>¿Cómo instalo Multitude?</h3>
+        <p>De tres formas: descargar Multitude-0.1.0.unitypackage del release y arrastrarlo a la ventana Project; añadir el tarball .tgz desde el Package Manager; o añadir la git URL https://github.com/gabriel96x1/Multitude.git. Instala solo una de las tres.</p>
+      </div>
+    </div>
+  </section>
 
   <section id="licencia">
     <div class="wrap">
