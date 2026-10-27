@@ -10,7 +10,7 @@ changed on disk in the meantime, Apply refuses to overwrite it and asks you what
 ![A Multitude window playing a VFX prefab](docs/assets/img/vfx-window.png)
 
 **Landing page:** open `docs/index.html` locally, or enable GitHub Pages with *Settings → Pages →
-Deploy from branch → `main` / `/docs`* and it will be served at
+Deploy from branch → `master` / `/docs`* and it will be served at
 `https://<your-user>.github.io/Multitude/`.
 
 ## Requirements
@@ -23,6 +23,25 @@ Deploy from branch → `main` / `/docs`* and it will be served at
 
 ## Install
 
+**Git URL (recommended):** `Window > Package Manager > + > Add package from git URL...`
+
+```
+https://github.com/gabriel96x1/Multitude.git
+```
+
+You can pin a version with `#v0.1.0` or a commit hash.
+
+**Released files:** each [release](https://github.com/gabriel96x1/Multitude/releases) carries two files:
+
+| File | How |
+|---|---|
+| `Multitude-<version>.unitypackage` | drag it into the Unity **Project** window, or double click it. Lands in `Assets/Multitude/` |
+| `com.gabs.multitude-<version>.tgz` | `+ > Add package from tarball...` |
+
+Pick **one** route: the `.unitypackage` puts the sources inside your project (easy to tweak, no package
+manager, no automatic updates), the package routes install it under `Packages/`. Installing both
+compiles the same types twice.
+
 **Local path (development):** in `Packages/manifest.json` of your project add
 
 ```json
@@ -31,13 +50,8 @@ Deploy from branch → `main` / `/docs`* and it will be served at
 
 or use `Window > Package Manager > + > Add package from disk...` and pick this folder's `package.json`.
 
-**Git URL (once the repository is published):** `Window > Package Manager > + > Add package from git URL...`
-
-```
-https://github.com/<your-user>/Multitude.git
-```
-
-You can pin a version with `#v0.1.0` or a commit hash.
+**Build the files yourself:** `./scripts/build-package.sh` runs the tests and writes both artifacts to
+`build/`. Details, flags and what each one ships: [Documentation~/BUILDING.md](Documentation~/BUILDING.md).
 
 ## Usage
 
@@ -62,7 +76,8 @@ never see anything from Multitude.
 
 ## Tests
 
-The package ships EditMode tests. To run them, add the package to the testables of your project's
+The package ships EditMode tests, included in the `.tgz` and in git URL installs (not in the
+`.unitypackage`). To run them, add the package to the testables of your project's
 `Packages/manifest.json`:
 
 ```json
@@ -82,6 +97,7 @@ Editor/Commands/              menu entries
 Tests/Editor/                 EditMode tests
 Documentation~/MVP.md         usage, limits and troubleshooting
 docs/                         landing page (English in /, Spanish in /es/, GitHub Pages ready)
+scripts/                      local packaging: build-package.sh + PackageExporter.cs
 ```
 
 ## License
